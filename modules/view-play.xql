@@ -3,7 +3,7 @@ xquery version "3.0";
 declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
-
+declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
 
 (:~ 
  : Parameters passed from the url 
@@ -16,5 +16,8 @@ declare variable $view {request:get-parameter('view', '')};
 let $rec := xmldb:document($uri)
 return 
     if($view = 'html') then transform:transform($rec, doc('../resources/xsl/teiHTML.xsl'),() )
-    else if($view = 'pdf') then transform:transform($rec, doc('../resources/xsl/editions-pdf.xsl'),() )
+    else if($view = 'pdf') then 
+        let $pdf:= xslfo:render(transform:transform($rec, doc('../resources/xsl/teiPDF.xsl'),()),'application/pdf', ())
+        return
+             response:stream-binary($pdf, "application/pdf", "output.pdf")
     else $rec/child::*
