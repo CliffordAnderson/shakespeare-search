@@ -1,13 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:t="http://www.tei-c.org/ns/1.0" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:s="http://syriaca.org" xmlns:saxon="http://saxon.sf.net/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:local="http://syriaca.org/ns" xmlns:fo="http://www.w3.org/1999/XSL/Format" exclude-result-prefixes="xs t s saxon" version="2.0">
-
-    <!-- 
-        XSLT code derived from Foldger Digital Texts editions.xsl for use 
-        in Vanderbilt's Summer XQuery Institute.
-        XSLT is for demonstration puropses only and does not 
-        make any claims on complete and accurate HTML/PDF output.
-        @Author Winona Salesky wsalesky@gmail.com
-    -->
+<xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:saxon="http://saxon.sf.net/" xmlns:t="http://www.tei-c.org/ns/1.0" xmlns:s="http://syriaca.org" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:local="http://syriaca.org/ns" xmlns:fo="http://www.w3.org/1999/XSL/Format" exclude-result-prefixes="xsd t s saxon" version="2.0">
+    <xsd:annotation>
+        <xsl:appinfo>Written by Winona Salesky wsalesky@gmail.com</xsl:appinfo>
+        <xsd:documentation>XSLT code derived from Foldger Digital Texts editions.xsl for use in Vanderbilt's Summer XQuery Institute.
+    XSLT is for demonstration puropses only and does not make any claims on complete and accurate HTML/PDF output.</xsd:documentation>
+    </xsd:annotation>
     <xsl:attribute-set name="h1">
         <xsl:attribute name="font-size">16pt</xsl:attribute>
         <xsl:attribute name="font-weight">bold</xsl:attribute>
@@ -33,7 +29,6 @@
     </xsl:attribute-set>
     <xsl:attribute-set name="href">
         <xsl:attribute name="color">blue</xsl:attribute>
-        <!--<xsl:attribute name="font-decoration">underline</xsl:attribute>-->
     </xsl:attribute-set>
     <xsl:attribute-set name="bold">
         <xsl:attribute name="font-weight">bold</xsl:attribute>
@@ -67,12 +62,8 @@
         <xsl:call-template name="title"/>
     </xsl:variable>
     <xsl:template match="/">
-        <!--fo:root establishes the page types and layouts contained in the PDF, the finding aid consists of 4 distinct 
-            page types, the cover page, the table of contents, contents and the container list. To alter basic page apperence 
-            such as margins fonts alter the following page-masters.-->
         <fo:root font-family="verdana, arial, sans-serif" font-size="10pt">
             <fo:layout-master-set>
-                <!-- Page master for Contents -->
                 <fo:simple-page-master master-name="contents" page-width="8.5in" page-height="11in" margin-top="0.25in" margin-bottom="0.5in" margin-left="0.5in" margin-right="0.5in">
                     <fo:region-body margin="0.5in" margin-bottom="1in"/>
                     <fo:region-before extent="0.75in"/>
@@ -123,8 +114,7 @@
         <fo:block>
             <fo:block xsl:use-attribute-sets="h1" border-bottom="1px">
                 <xsl:call-template name="title"/>
-            </fo:block>   
-            <!-- End Title -->
+            </fo:block>
             <fo:block>
                 <fo:block xsl:use-attribute-sets="h4">Folger Shakespeare Library</fo:block>
                 <fo:block xsl:use-attribute-sets="p">

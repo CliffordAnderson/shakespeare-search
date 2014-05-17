@@ -1,10 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+     A build script for the XQuery Institute's Demo App
+
+     Since eXist-db's XQuery is usually edited in the database via eXide, this script
+     works to keep the eXist-db and Git repository on the local file system in sync.
+
+     Workflow:
+       1) Keep a 'master' Git repository and a local branch (I named mine 'ksclarke')
+       2) Pull changes down from 'master' and merge them into 'ksclarke'
+       3) Once file system and upstream Git (i.e. 'master') are like you want them in the
+          local 'ksclarke' branch, run (on the command line, from that branch):
+            ant dump-db-files
+
+          This will dump the changes (the most recent versions from eXist-db) to the file
+          system where Git can be used to compare changes from the database with changes
+          from other the developers upstream.
+       4) Merge database changes and upstream developer's changes into 'ksclarke' branch
+       5) Now to push the changes from the file system (which include the changes from the
+          upstream developer (and the most recent eXist-db changes) back to eXist-db, run:
+            ant update-db
+
+          This will write the contents of the file system into the database, destructively
+          overwriting the files that live in the eXist-db.
+       6) Rinse. Wash. Repeat.
+
+     Author: Kevin S. Clarke <ksclarke@gmail.com>
+     Last Updated: 2014/05/17 
+-->
 <project default="xar" name="xq-institute">
+    <!-- Properties that may vary depending on developer's configuration -->
+    <property file="build.properties"/>
+
+    <!-- Properties that should be consistent across developer builds -->
     <property name="project.version" value="0.1"/>
     <property name="project.app" value="xq-institute"/>
-    <property name="build.dir" value="build"/>
+
+    <!-- Creates a classpath using ${exist.home} (defined in build.properties) -->
+    <path id="classpath.core">
+        <fileset dir="${exist.home}/lib/core">
+            <include name="*.jar"/>
+        </fileset>
+        <pathelement path="${exist.home}/exist.jar"/>
+        <pathelement path="${exist.home}/exist-optional.jar"/>
+    </path>
+
+    <!-- Pulls in the eXist-db ant extensions from the project's ${classpath.core} -->
+    <typedef resource="org/exist/ant/antlib.xml" uri="http://exist-db.org/ant">
+        <classpath refid="classpath.core"/>
+    </typedef>
+
+    <!-- Dumps the current state from the database to the Git file system-->
+    <target name="dump-db-files">
+        <xdb:extract xmlns:xdb="http://exist-db.org/ant" destdir="." subcollections="true" createdirectories="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}" overwrite="true"
+          user="${db.username}" password="${db.password}" /> <!-- u/p should be configured in build.properties -->
+
+       <!-- We have to rename files because eXist-db's Ant task only expects to output XML files  -->
+        <move todir="." verbose="false">
+            <fileset dir="." includes="**/*"/>
+            <globmapper from="*.xsl.xml" to="*.xsl"/>
+        </move>
+        <move todir="." verbose="false">
+            <fileset dir="." includes="**/*"/>
+            <globmapper from="*.html.xml" to="*.html"/>
+        </move>
+        <move todir="." verbose="false">
+            <fileset dir="." includes="**/*"/>
+            <globmapper from="*.xconf.xml" to="*.xconf"/>
+        </move>
+    </target>
+
+    <!-- Updates (destructively) the eXist-db with files from the file system -->
+    <target name="update-db">
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir=".">
+                <!-- We don't need build script in eXist-db and it would lose its comments on export from there -->
+                <exclude name="build.xml"/>
+                <include name="*.xml"/>
+                <include name="*.xql"/>
+                <include name="*.html"/>
+                <include name="*.xconf"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/data/plays"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="data/plays">
+                <include name="*.xml"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/modules"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="modules">
+                <include name="*.xqm"/>
+                <include name="*.xql"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/templates"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="templates">
+                <include name="*.html"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/css">
+                <include name="*.css"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/xsl"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/xsl">
+                <include name="*.xsl"/>
+            </fileset>
+        </xdb:store>
+    </target>
+
+    <!-- Builds the XAR package for the XQuery Institute demo application -->
     <target name="xar">
         <mkdir dir="${build.dir}"/>
         <zip basedir="." destfile="${build.dir}/${project.app}-${project.version}.xar" excludes="${build.dir}/*"/>
+    </target>
+
+    <!-- Deletes the build directory, including previously built XAR packages -->
+    <target name="clean">
+        <delete dir="${build.dir}"/>
     </target>
 </project>

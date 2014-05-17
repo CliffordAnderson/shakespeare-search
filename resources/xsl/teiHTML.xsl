@@ -1,12 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:estr="http://exslt.org/strings" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
-    <!-- 
-        XSLT code derived from Foldger Digital Texts editions.xsl for use 
-        in Vanderbilt's Summer XQuery Institute.
-        XSLT is for demonstration puropses only and does not 
-        make any claims on complete and accurate HTML/PDF output.
-        @Author Winona Salesky wsalesky@gmail.com
-    -->
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:estr="http://exslt.org/strings" xmlns:exsl="http://exslt.org/common" xmlns:edate="http://exslt.org/dates-and-times" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
+    <xsd:annotation>
+        <xsl:appinfo>Written by Winona Salesky wsalesky@gmail.com</xsl:appinfo>
+        <xsd:documentation>XSLT code derived from Foldger Digital Texts editions.xsl for use in Vanderbilt's Summer XQuery Institute.
+    XSLT is for demonstration puropses only and does not make any claims on complete and accurate HTML/PDF output.</xsd:documentation>
+    </xsd:annotation>
     <xsl:template match="/">
         <div class="row">
             <div class="col-md-12">
@@ -378,6 +375,5 @@
         <span class="indentInline">&#160;</span>
         <xsl:apply-templates/>
     </xsl:template>
-    <!-- Suppress elements -->
     <xsl:template match="tei:del | tei:app | tei:back | tei:fw[@type='header']"/>
 </xsl:stylesheet>
