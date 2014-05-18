@@ -2,6 +2,8 @@
 #                                                                               #
 #  Developer configuration options for the XQuery Institute's Demo Application  #
 #                                                                               #
+#  Copy this file to 'build.properties' & replace its values with real values.  #
+#                                                                               #
 #################################################################################
 
 #
