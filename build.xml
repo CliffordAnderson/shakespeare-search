@@ -34,6 +34,7 @@
     <!-- Properties that should be consistent across developer builds -->
     <property name="project.version" value="0.1"/>
     <property name="project.app" value="xq-institute"/>
+    <property name="build.dir" value="build"/>
 
     <!-- Creates a classpath using ${exist.home} (defined in build.properties) -->
     <path id="classpath.core">
