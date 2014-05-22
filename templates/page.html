@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title data-template="config:app-title">App Title</title>
@@ -24,19 +23,19 @@
             </div>
             <div class="navbar-collapse collapse" id="navbar-collapse-1">
                 <div class="col-xs-5 col-sm-3 pull-right">
-                    <form class="navbar-form" role="search" action="search.html">
+                    <form class="navbar-form" role="search" id="searchForm">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="term" id="term"/>
                             <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn-default" type="submit" formaction="search.html">
                                     <span class="glyphicon glyphicon-search"/>
+                                </button>
+                                <button class="btn btn-default" type="submit" formaction="advanced_search.html">
+                                    <span class="glyphicon glyphicon-cog"/>
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <div class="nav navbar-nav pull-right">
-                        <a class="pull-right" href="search.html">advanced search</a>
-                    </div>
                 </div>
                 <ul class="nav navbar-nav">
                     <li>

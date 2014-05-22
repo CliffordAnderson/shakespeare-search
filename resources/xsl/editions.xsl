@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:estr="http://exslt.org/strings" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common" xmlns:xd="http://www.pnp-software.com/XSLTdoc" exclude-result-prefixes="xd exsl estr edate a fo local rng tei teix" extension-element-prefixes="exsl estr edate" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:local="http://www.pantor.com/ns/local" xmlns:estr="http://exslt.org/strings" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xd="http://www.pnp-software.com/XSLTdoc" xmlns:exsl="http://exslt.org/common" exclude-result-prefixes="xd exsl estr edate a fo local rng tei teix" extension-element-prefixes="exsl estr edate" version="1.0">
     <xd:doc type="stylesheet">
         <xd:short> TEI stylesheet dealing with elements from the drama module,
       making HTML output. </xd:short>
@@ -189,10 +188,6 @@
         </div>
         <div style="clear:both;"/>
     </xsl:template>
-  <!--
-  <xsl:template match="tei:listPerson/tei:head">
-  </xsl:template>
-  -->
     <xsl:template match="tei:particDesc//tei:person[tei:persName]">
         <div style="line-height:20px;">
             <xsl:apply-templates/>
@@ -265,11 +260,6 @@
             <xsl:apply-templates/>
         </div>
     </xsl:template>
-  <!--
-  <xsl:template match="tei:div1[1]/tei:head">
-     <div class="actHeader"><xsl:apply-templates/></div>
-  </xsl:template>
-  -->
     <xsl:template match="tei:div2">
         <a name="line-{../@n}.{@n}.0"/>
         <div class="div2">
@@ -642,10 +632,6 @@
     <xsl:template match="tei:ptr[@type='stanza'][@ana='#aaaBcccB'][@n='4' or @n='8']">
         <span class="alignment" style="padding-left:20px;">&#160;</span>
     </xsl:template>
-
-  <!--
-  <xsl:template match="//*[key('altRdg',@xml:id)]">
-  -->
     <xsl:template match="tei:ptr[@type='stanza'][key('altRdg',@xml:id)]">
         <xsl:choose>
             <xsl:when test="$rdg = 'lemma'">
@@ -660,20 +646,6 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-  <!--  Test whether stage direction words appear in a line <join>
-  <xsl:template match="tei:stage/*">
-    <xsl:variable name="stgId" select="@xml:id"/>
-    <xsl:choose>
-    <xsl:when test="//tei:join[contains(@target,$stgId)]">
-      <span class="red" style="border:10px solid red;"><xsl:apply-templates/></span>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:apply-templates/>
-    </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-  -->
     <xsl:template match="tei:ab">
         <span class="indentInline">&#160;</span>
         <xsl:apply-templates/>

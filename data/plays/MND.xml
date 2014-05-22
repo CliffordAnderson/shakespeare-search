@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="editions.xsl"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
     <teiHeader>
@@ -30396,9 +30395,6 @@ The <att>ana</att> attribute identifies the characters associated with that stag
                                 <c xml:id="c0240300" n="3.2.481"/>
                                 <w xml:id="w0240310" n="3.2.481">remedy</w>
                                 <pc xml:id="p0240320" n="3.2.481">.</pc>
-<!--
-</seg>
--->
                                 <lb xml:id="lb-14920"/>
                                 <milestone xml:id="ms-115" n="115" unit="page"/>
                                 <pb xml:id="pb-117" n="117" spanTo="#ms-117"/>
