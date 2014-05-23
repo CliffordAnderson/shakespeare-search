@@ -107,3 +107,6 @@ br { clear:both; }
 .signature { float:left;padding:0;margin:0;text-align:center;width:20%;margin-left:40%; background-color:white}
 .catchword { float:right;padding:0;margin:0;text-align:right;width:40%; background-color:white}
 
+/* -- Search results-- */
+.hi {display: inline-block; padding: 0 5px; background: #eee; font-weight:500;}
+.title {display:block; font-weight:500;}

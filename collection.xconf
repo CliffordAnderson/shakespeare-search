@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://exist-db.org/collection-config/1.0">
-    <index xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:mods="http://www.loc.gov/mods/v3">
+    <index xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xqi="http://xqueryinstitute.org/ns">
         <fulltext default="none" attributes="no"/>
         <lucene>
-            <text qname="tei:title"/>
-            <text qname="tei:body"/>
-            <text qname="tei:stage"/>
-            <text qname="tei:sp"/>
-            <text qname="tei:speaker"/>
+            <text qname="tei:title" boost="2.0"/>
+            <text qname="xqi:fulltext"/>
+            <!--
+            <text qname="tei:sp">
+                <ignore qname="tei:milestone"/>
+                <ignore qname="tei:speaker"/>
+                <ignore qname="tei:stage"/>
+                <ignore qname="tei:c"/>
+                <ignore qname="tei:pc"/>
+                <ignore qname="tei:lb"/>
+                <ignore qname="tei:join"/>
+            </text>
+            -->
+            <text qname="tei:stage">
+                <ignore qname="tei:milestone"/>
+                <ignore qname="tei:c"/>
+                <ignore qname="tei:pc"/>
+                <ignore qname="tei:lb"/>
+                <ignore qname="tei:join"/>
+            </text>
+            <!--<text qname="tei:speaker" boost="1.0"/>-->
         </lucene>
-        <create qname="tei:persName" type="xs:string"/>
-        <!--<create qname="tei:w" type="xs:string"/>-->
-        <!--<create qname="tei:speaker" type="xs:string"/>-->
-        <!--<create qname="tei:title" type="xs:string"/>-->
-        <!-- Possible additions       @type @unit-->
+        <create qname="tei:title" type="xs:string"/>
+        <create qname="tei:speaker" type="xs:string"/>
+        <create qname="xqi:performed" type="xs:string"/>
+        <create qname="xqi:genre" type="xs:string"/>
+        <!-- Add a search to limit by speaker and by play? -->
+        <!-- new range index 
+        <create qname="tei:witness">
+            <field name="orig-date" match="tei:date" type="xs:string"/>
+        </create>-->
+        <!--<create qname="@who" type="xs:string"/>-->
     </index>
 </collection>

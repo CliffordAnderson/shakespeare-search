@@ -14,6 +14,7 @@ import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://localhost:8080/exist/apps/xq-institute/config" at "config.xqm";
 import module namespace app="http://localhost:8080/exist/apps/xq-institute/templates" at "app.xql";
 import module namespace search="http://localhost:8080/exist/apps/xq-institute/search" at "search.xqm";
+import module namespace facets="http://localhost:8080/exist/apps/xq-institute/facets" at "facets.xqm";
 
 declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";
 

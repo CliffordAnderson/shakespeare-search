@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:estr="http://exslt.org/strings" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:estr="http://exslt.org/strings" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
     <!-- 
         XSLT code derived from Foldger Digital Texts editions.xsl for use 
         in Vanderbilt's Summer XQuery Institute.
@@ -153,6 +153,28 @@
     <xsl:template match="tei:w|tei:c|tei:pc|tei:w/tei:seg|tei:anchor" xml:space="preserve">
         <xsl:apply-templates/>
     </xsl:template>
+    <xsl:template match="tei:stage[@type='mixed']">
+        <xsl:variable name="lineNbr" select="(substring-after(@n,'SD '))"/>
+        <a class="hidden" name="line-SD{$lineNbr}">SD</a>
+        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
+        <xsl:choose>
+            <xsl:when test="descendant::tei:stage[@type='entrance']">
+                <span class="stage centered {$class}">
+                    <xsl:apply-templates/>
+                </span>
+            </xsl:when>
+            <xsl:when test="@rend='inline'">
+                <span class="stage {$class}">
+                    <xsl:apply-templates/>
+                </span>
+            </xsl:when>
+            <xsl:otherwise>
+                <span class="stage right {$class}">
+                    <xsl:apply-templates/>
+                </span>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
     <xsl:template match="tei:stage[@type='entrance']">
         <xsl:variable name="lineNbr" select="(substring-after(@n,'SD '))"/>
         <a class="hidden" name="line-SD{$lineNbr}">SD</a>
@@ -176,44 +198,6 @@
         <span class="stage {$class}">
             <xsl:apply-templates/>
         </span>
-    </xsl:template>
-    <xsl:template match="tei:stage[contains(@rend,'inline')]">
-        <xsl:variable name="lineNbr" select="(substring-after(@n,'SD '))"/>
-        <a class="hidden" name="line-SD{$lineNbr}">SD</a>
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <span class="stage {$class}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    <xsl:template match="tei:stage[contains(@rend,'centered')]">
-        <xsl:variable name="lineNbr" select="(substring-after(@n,'SD '))"/>
-        <a class="hidden" name="line-SD{$lineNbr}">SD</a>
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <span class="stage centered {$class}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    <xsl:template match="tei:stage[@type='mixed']">
-        <xsl:variable name="lineNbr" select="(substring-after(@n,'SD '))"/>
-        <a class="hidden" name="line-SD{$lineNbr}">SD</a>
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <xsl:choose>
-            <xsl:when test="descendant::tei:stage[@type='entrance']">
-                <span class="stage centered {$class}">
-                    <xsl:apply-templates/>
-                </span>
-            </xsl:when>
-            <xsl:when test="@rend='inline'">
-                <span class="stage {$class}">
-                    <xsl:apply-templates/>
-                </span>
-            </xsl:when>
-            <xsl:otherwise>
-                <span class="stage right {$class}">
-                    <xsl:apply-templates/>
-                </span>
-            </xsl:otherwise>
-        </xsl:choose>
     </xsl:template>
     <xsl:template match="tei:stage[@rend='inline']//tei:lb">
         <br/>
@@ -239,25 +223,7 @@
             <xsl:apply-templates/>
         </span>
     </xsl:template>
-    <xsl:template match="tei:seg[@type='letter'][@subtype='closing']">
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <span class="closing {$class}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    <xsl:template match="tei:seg[@type='letter'][@subtype='signature']">
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <span class="right {$class}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    <xsl:template match="tei:seg[@type='letter'][@subtype='closing']/tei:seg[@type='letter'][@subtype='signature']">
-        <xsl:variable name="class" select="translate(@rend,',',' ')"/>
-        <span class="closingSig {$class}">
-            <xsl:apply-templates/>
-        </span>
-    </xsl:template>
-    <xsl:template match="tei:seg[@type='dramatic']">
+    <xsl:template match="tei:seg">
         <span class="italic">
             <xsl:apply-templates/>
         </span>
