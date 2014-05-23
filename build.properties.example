@@ -1,0 +1,22 @@
+#################################################################################
+#                                                                               #
+#  Developer configuration options for the XQuery Institute's Demo Application  #
+#                                                                               #
+#  Copy this file to 'build.properties' & replace its values with real values.  #
+#                                                                               #
+#################################################################################
+
+#
+# Username for the eXist-db
+#
+db.username=MY_USER_NAME_GOES_HERE
+
+#
+# Password for the eXist-db
+#
+db.password=MY_PASSWORD_GOES_HERE
+
+#
+# Path to the eXist-db installation (so Ant tasks can be found)
+#
+exist.home=/path/to/my/exist/installation
