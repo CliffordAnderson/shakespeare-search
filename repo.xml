@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
     <description>Teaching materials for XQuery Summer Institute.</description>
     <author>Winona Salesky</author>
@@ -10,4 +9,5 @@
     <target>xq-institute</target>
     <prepare>pre-install.xql</prepare>
     <finish/>
+    <deployed>2014-05-18T18:50:17.521-04:00</deployed>
 </meta>

@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title data-template="config:app-title">App Title</title>
@@ -7,6 +6,7 @@
         <link rel="shortcut icon" href="$shared/resources/images/exist_icon_16x16.ico"/>
         <link rel="stylesheet" type="text/css" href="$shared/resources/css/bootstrap-3.0.3.min.css"/>
         <link rel="stylesheet" type="text/css" href="resources/css/editions.css"/>
+        <link rel="stylesheet" type="text/css" href="resources/css/style.css"/>
         <script type="text/javascript" src="$shared/resources/scripts/jquery/jquery-1.7.1.min.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/loadsource.js"/>
         <script type="text/javascript" src="$shared/resources/scripts/bootstrap-3.0.3.min.js"/>
@@ -28,15 +28,15 @@
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search" name="term" id="term"/>
                             <div class="input-group-btn">
-                                <button class="btn btn-default" type="submit">
+                                <button class="btn btn-default" type="submit" formaction="search.html">
                                     <span class="glyphicon glyphicon-search"/>
+                                </button>
+                                <button class="btn btn-default" type="submit" formaction="search.html">
+                                    <span class="glyphicon glyphicon-cog"/>
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <div class="nav navbar-nav pull-right">
-                        <a class="pull-right" href="search.html">advanced search</a>
-                    </div>
                 </div>
                 <ul class="nav navbar-nav">
                     <li>
