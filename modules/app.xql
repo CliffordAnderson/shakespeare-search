@@ -36,6 +36,7 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
     return (:app:title-sort($title, 'The A'):)(:$sort-title:)
         app:display-title($title,$uri)
 }; 
+
 (:
 declare function app:title-sort($title as xs:string?, $non-sort-list as xs:string?){
     for $non-sort in tokenize($non-sort-list,'\s')
