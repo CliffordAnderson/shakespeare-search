@@ -1,30 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-12">
             <div class="page-header">
                 <h1 data-template="config:app-title">XQuery Summer Institute data.</h1>
             </div>
             <div class="alert alert-success">
-                <p>App demonstrating functions for App for XQuery Summer Institute using Folger Shakespear Library tei data.</p>
+                <p>App demonstrating functions for App for XQuery Summer Institute using Folger Shakespeare Library tei data.</p>
             </div>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-8">
+                    <script type="text/javascript" src="http://cdn.knightlab.com/libs/timeline/latest/js/storyjs-embed.js"></script>
+                    <script type="text/javascript" src="resources/js/timeline.js"></script>
+                    <h4>Timeline of Shakespeare's plays</h4>
+                    <div id="my-timeline"></div>
+                    <p>*Timeline generated with <a href="http://timeline.knightlab.com/">http://timeline.knightlab.com/</a></p>
+                </div>
+                <div class="col-md-4">
+                    <h4>The collection</h4>
                     <ul>
                         <li>
-                            <a href="browse.html">Browse</a>
+                            <a href="browse.html">Browse the plays</a>
                         </li>
                     </ul>
-                    <p>The page template uses the <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>
-                        CSS library for the page layout.</p>
-                </div>
-                <div class="col-md-6">
-                    <h4>Cool stuff goes here...</h4>
                 </div>
             </div>
         </div>
+        <!--
         <div class="col-md-4">
             <h2>Application Info</h2>
             <div data-template="config:app-info"/>
         </div>
+        -->
     </div>
 </div>
