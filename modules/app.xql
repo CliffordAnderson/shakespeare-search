@@ -7,18 +7,21 @@ import module namespace config="http://localhost:8080/exist/apps/xq-institute/co
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
-
+declare variable $app:sort {request:get-parameter('sort', '')};
 (:~
  : Browse using sort
  : Using user defined functions to modularize code
 :)
 declare %templates:wrap function app:browse-list-items($node as node(), $model as map(*)){
-    for $play in collection($config:app-root || "/data")
+    for $play in collection($config:app-root || "/data/plays")
     let $title := $play//tei:titleStmt/tei:title/text()
     (: NOTE: construct a more robust function to run through a list of stop words using tokenize?:)
     let $sort-title := replace(replace($title,'^The ',''),'^A ','')
+    let $date := $play//tei:witness[@xml:id = 'shakespeare-online'][1]/tei:date[1]/text()
     let $uri := base-uri($play)
-    order by $sort-title
+    order by 
+        if($app:sort = 'date') then $date
+        else $sort-title
     return 
         app:display-title($title,$uri)
 }; 
