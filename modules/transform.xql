@@ -14,11 +14,11 @@ declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
  re-index, change xqueries to use new index. 
 :)
 
-for $doc-index in collection('/db/apps/xq-institute/data/plays')
+for $doc-index in collection('/db/apps/xq-institute/data/plays')[1]
 let $uri := base-uri($doc-index)
 let $doc := xmldb:document($uri)/tei:TEI
 let $doc-name := util:document-name($doc)
 let $newDoc := transform:transform($doc, doc('../resources/xsl/tei-to-tei.xsl'),() )
-return
-    xmldb:store('/db/apps/xq-institute/data/indexed-plays', $doc-name, $newDoc)
+return $newDoc
+    (:xmldb:store('/db/apps/xq-institute/data/indexed-plays', $doc-name, $newDoc):)
   
