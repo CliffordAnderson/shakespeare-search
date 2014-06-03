@@ -1,0 +1,8 @@
+<div xmlns="http://www.w3.org/1999/xhtml" data-template="templates:surround" data-template-with="templates/page.html" data-template-at="content">
+    <div data-template="demo:browse-works">
+        <div data-template="templates:each" data-template-from="works" data-template-to="tei:titleStmt">
+            <div style="font-weight: bold;" data-template="demo:get-title"/>
+            <div style="text-indent: 15px;" data-template="demo:get-author"/>
+        </div>
+    </div>
+</div>

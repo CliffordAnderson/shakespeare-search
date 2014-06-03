@@ -25,7 +25,7 @@
        6) Rinse. Wash. Repeat.
 
      Author: Kevin S. Clarke <ksclarke@gmail.com>
-     Last Updated: 2014/05/17 
+     Last Updated: 2014/05/24 
 -->
 <project default="xar" name="xq-institute">
     <!-- Properties that may vary depending on developer's configuration -->
@@ -108,9 +108,37 @@
             </fileset>
         </xdb:store>
         <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/slides"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="slides">
+                <include name="*.html"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/demos"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="demos">
+                <include name="*.html"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/css">
+                <include name="*.css"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css/theme"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/css/theme">
+                <include name="*.css"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css/print"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/css/print">
                 <include name="*.css"/>
             </fileset>
         </xdb:store>
@@ -119,6 +147,27 @@
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/xsl">
                 <include name="*.xsl"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/js">
+                <include name="*.js"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js/highlight"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/js/highlight">
+                <include name="*.js"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js/print-pdf"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/js/print-pdf">
+                <include name="*.js"/>
             </fileset>
         </xdb:store>
     </target>

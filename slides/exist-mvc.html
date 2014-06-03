@@ -1,0 +1,634 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>MVC in eXist-db</title>
+        <meta name="description" content="Using the Model-View-Controller Pattern in eXist-db"/>
+        <meta name="author" content="Kevin S. Clarke"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="$root/resources/css/reveal.css"/>
+        <link rel="stylesheet" href="$root/resources/css/zenburn.css"/>
+        <link rel="stylesheet" href="$root/resources/css/theme/xqi.css" id="theme"/>
+        <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+		    var link = document.createElement('link');
+		    link.rel = 'stylesheet';
+		    link.type = 'text/css';
+		    link.href = '$root/resources/css/print/pdf.css';
+		    document.getElementsByTagName('head')[0].appendChild(link);
+	    }
+        </script>
+        
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>MVC in eXist-db</h1>
+                </section>
+                <section>
+                    <section>
+                        <h2>Model</h2>
+                        <h2>View</h2>
+                        <h2>Controller</h2>
+                    </section>
+                    <section>
+                        <h2>Model</h2>
+                        <img class="stretch" src="https://s3.amazonaws.com/ksclarke-cc-images/tinker-toys.jpg"/>
+                    </section>
+                    <section>
+                        <h2>View</h2>
+                        <img class="stretch" src="https://s3.amazonaws.com/ksclarke-cc-images/filter-view.jpg"/>
+                    </section>
+                    <section>
+                        <h2>Controller</h2>
+                        <img class="stretch" src="https://s3.amazonaws.com/ksclarke-cc-images/controller.jpg"/>
+                    </section>
+                </section>
+                <section>
+                    <h2>Models in eXist-db</h2>
+                    <img class="stretch" src="https://s3.amazonaws.com/ksclarke-cc-images/shakespeare.jpg"/>
+                </section>
+                <section>
+                    <section>
+                        <h2>How Does eXist-db Handle Views?</h2>
+                    </section>
+                    <section>
+                        <h2>HTML Templates</h2>
+                        <img class="stretch" src="https://s3.amazonaws.com/ksclarke-cc-images/meme-templates.png"/>
+                    </section>
+                    <section>
+                        <h3>XQuery » HTML5 Fragment » HTML Template Page</h3>
+                        <img class="stretch" style="border-style: none;" src="https://s3.amazonaws.com/ksclarke-cc-images/Russian-Matroshka.png"/>
+                    </section>
+                    <section>
+                        <h2>An HTML Page</h2>
+                        <h4>(in the <a target="_blank" href="/exist/admin/admin.xql?panel=browse&amp;collection=/db/apps/xq-institute/templates">templates</a> directory)</h4>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;html&gt;
+     &lt;head&gt;
+         &lt;title&gt;My Webpage Title&lt;/title&gt;
+         &lt;link rel="stylesheet" type="text/css"
+          href="resources/css/bootstrap.css"/&gt;
+     &lt;/head&gt;
+     &lt;body&gt;
+         &lt;div id="content" class="container"/&gt;
+     &lt;/body&gt;
+ &lt;/html&gt;
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>HTML5 Fragment</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround"
+  data-template-with="templates/page.html"
+  data-template-at="content"&gt;
+     &lt;div&gt;
+         &lt;div&gt;
+             &lt;div&gt;
+                 &lt;h1&gt;Welcome To My Page&lt;/h1&gt;
+             &lt;/div&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template.html">(demo)</a>
+                        </p>
+                    </section>
+                    <section id="simple-template">
+                        <h2>XQuery Integration</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround"
+  data-template-with="templates/page.html"
+  data-template-at="content"&gt;
+     &lt;div&gt;
+         &lt;div&gt;
+             &lt;div&gt;
+                 &lt;h1&gt;Welcome To My Page&lt;/h1&gt;
+             &lt;/div&gt;
+             &lt;div data-template="demo:hello"/&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template-1.html">(demo)</a>
+                        </p>
+                    </section>
+                    <section id="xqfunctions">
+                        <h2>XQuery Functions</h2>
+                        <pre class="stretch">
+                            <code class="javascript">
+ (: Simple "HTML Template"-based XQ Function :)    
+
+ declare function demo:hello($node as node(),
+         $model as map(*), $lang as xs:string*)
+         as element(div) {
+     let $header :=
+         request:get-header('Accept-Language')
+
+     let $langCode :=
+         if (exists($lang[. ne ''])) then
+             if (count($lang) &gt; 1
+                 or contains($lang, ','))
+             then demo:simple-lang-parse($lang)
+             else $lang
+         else demo:simple-lang-parse($header)
+     return
+         &lt;div&gt;{
+             switch($langCode)
+                 case "fr" return
+                     "Bonjour!"
+                 case "de" return
+                     "Hallo!"
+                 case "it" return
+                     "Ciao!"
+                 case "es" return
+                     "Hola!"
+                 default return
+                     "Hello!"
+         }&lt;/div&gt;
+ };
+
+
+ (: A simplistic HTTP "Accept-Language"
+  : (and other language string) parser.
+  : 
+  : Example input: en-US,en;q=0.8,ar;q=0.6
+  :)
+ declare function demo:simple-lang-parse(
+         $langsInput as xs:string+) as xs:string {
+     let $langs :=
+         for $lang in $langsInput
+         return
+             for $token in tokenize($lang, ',')
+             return functx:trim(
+                 if (contains($token, ';'))
+                 then substring-before($token, ';')
+                 else $token
+             )
+     return
+         if ($langs[. = 'fr']) then 'fr'
+         else if ($langs[. = 'de']) then 'de'
+         else if ($langs[. = 'es']) then 'es'
+         else if ($langs[. = 'it']) then 'it'
+         else 'en'
+ };
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Better Integration... Automagically!</h2>
+                        <br/>
+                        <ul>
+                            <li>automatic parameter injection</li>
+                            <li>automatic type conversion</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Boilerplate Code<br/>Not Required</h2>
+                        <pre class="stretch">
+                            <code class="language-javascript">
+ xquery version "3.0";
+
+ declare namespace request =
+     "http://exist-db.org/xquery/request";
+
+ let $query :=
+     request:get-parameter('query', ())
+ let $field :=
+     request:get-parameter('field', ())
+
+ let $size :=
+     request:get-parameter('size', 1)
+     cast as xs:int
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Function Parameters</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround"
+  data-template-with="templates/page.html"
+  data-template-at="content"&gt;
+     &lt;div&gt;
+         &lt;div&gt;
+             &lt;div&gt;
+                 &lt;h1&gt;Welcome To My Page&lt;/h1&gt;
+             &lt;/div&gt;
+             &lt;div data-template="demo:hello"
+               data-template-lang="de"/&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template-2.html">(demo)</a>
+                            &#160;&#160;
+                            <a target="_blank" href="#/xqfunctions">(xquery)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Multiple Values</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround"
+  data-template-with="templates/page.html"
+  data-template-at="content"&gt;
+     &lt;div&gt;
+         &lt;div&gt;
+             &lt;div&gt;
+                 &lt;h1&gt;Welcome To My Page&lt;/h1&gt;
+             &lt;/div&gt;
+             &lt;div data-template="demo:hello"
+               data-template-lang="de,fr"/&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template-3.html">(demo)</a>
+                            &#160;&#160;
+                            <a target="_blank" href="#/xqfunctions">(xquery)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Multiple Values</h2>
+                        <br/>
+                        <ul>
+                            <li>HTTP Parameters</li>
+                            <li>HTTP Session Attributes</li>
+                        </ul>
+                        <br/>
+                        <br/>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="http://localhost:8080/exist/apps/xq-institute/demos/simple-template-1.html?lang=de&amp;lang=fr">http://localhost:8080/exist/apps/xq-institute/demos/simple-template-1.html?lang=de&amp;lang=fr</a>
+                            <br/>
+                            <br/>
+                            <a target="_blank" href="#/simple-template">(template)</a>
+                            &#160;&#160;
+                            <a target="_blank" href="#/xqfunctions">(xquery)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>'Default' Annotation</h2>
+                        <pre class="stretch">
+                            <code class="javascript">
+ declare %templates:default('lang', 'it')
+ function demo:hello-redux($node as node(),
+         $model as map(*), $lang as xs:string*)
+         as element(div) {
+     let $header :=
+         request:get-header('Accept-Language')
+
+     let $langCode :=
+         if (exists($lang[. ne ''])) then
+             if (count($lang) &gt; 1
+                 or contains($lang, ','))
+             then demo:simple-lang-parse($lang)
+             else $lang
+         else demo:simple-lang-parse($header)
+     return
+         <div>{
+             switch($langCode)
+                 case "fr" return
+                     "Bonjour!"
+                 case "de" return
+                     "Hallo!"
+                 case "it" return
+                     "Ciao!"
+                 case "es" return
+                     "Hola!"
+                 default return
+                     "Hello!"
+         }</div>
+ };
+                            
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>A 'Default' Example</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround"
+  data-template-with="templates/page.html"
+  data-template-at="content"&gt;
+     &lt;div&gt;
+         &lt;div&gt;
+             &lt;div&gt;
+                 &lt;h1&gt;Welcome To My Page&lt;/h1&gt;
+             &lt;/div&gt;
+             &lt;div data-template="demo:hello-redux"/&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template-4.html">(demo)</a>
+                            &#160;&#160;
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/simple-template-4.html?lang=en">(same demo with parameter)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Nested Templates</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround" 
+     data-template-with="templates/page.html"
+     data-template-at="content"&gt;
+
+     &lt;!-- Templates can be nested, like below --&gt;
+     &lt;div data-template="demo:browse-works"&gt;
+         &lt;div data-template="templates:each"
+             data-template-from="works"
+             data-template-to="tei:titleStmt"&gt;
+
+             &lt;div style="font-weight: bold;"
+                 data-template="demo:get-title"/&gt;
+             &lt;div style="text-indent: 15px;"
+                 data-template="demo:get-author"/&gt;
+         &lt;/div&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/nested-template.html">(demo)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Nested Functions</h2>
+                        <pre class="stretch">
+                            <code class="javascript">
+ (: Be sure to import 'config' module namespace :)
+
+ declare function demo:browse-works($node as node(),
+         $model as map(*)) as map(*) {
+     map { 'works' := collection($config:app-root
+             || '/data/plays')//tei:titleStmt }
+ };
+
+ declare %templates:wrap
+ function demo:get-title($node as node(),
+         $model as map(*)) as xs:string {
+     $model('tei:titleStmt')/tei:title/string()
+ };
+
+ declare %templates:wrap
+ function demo:get-author($node as node(),
+         $model as map(*)) as xs:string {
+
+     let $author :=
+         $model('tei:titleStmt')/tei:author/string()
+     return 'By: ' || $author
+ };
+                            
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>More Annotations</h2>
+                        <br/>
+                        <ul>
+                            <li>templates:if-parameter-set</li>
+                            <li>templates:if-parameter-unset</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Parameter Checks</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ &lt;div data-template="templates:surround" 
+ data-template-with="templates/page.html"
+ data-template-at="content"&gt;
+     &lt;div
+     data-template="templates:if-parameter-set"
+     data-template-param="name"&gt;
+         &lt;div data-template="demo:say-hello"/&gt;
+     &lt;/div&gt;
+     &lt;div
+     data-template="templates:if-parameter-unset"
+     data-template-param="name"&gt;
+         &lt;div data-template="demo:introduce"/&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+
+</code>
+                        </pre>
+                        <p style="font-size: 75%">
+                            <a target="_blank" href="/exist/apps/xq-institute/demos/if-param-template.html">(demo)</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Show Me the Code!</h2>
+                        <pre class="stretch">
+                            <code class="javascript">
+ declare function demo:say-hello($node as node(),
+         $model as map(*), $name as xs:string)
+         as element(div) {
+
+     &lt;div&gt;Hello, {$name}, thanks for introducing
+     yourself!&lt;/div&gt;
+ };
+
+ declare function demo:introduce($node as node(),
+         $model as map(*)) as element(div) {
+
+     &lt;div&gt;Hello, what is your name?&lt;/div&gt;
+ };
+                            
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>And, That's Not All!</h2>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>eXist-db Controller</h2>
+                        <h2>and URL Rewriter</h2>
+                    </section>
+                    <section>
+                        <h2>An XQuery Pipeline</h2>
+                        <pre class="stretch">
+                            <code class="javascript">
+ xquery version "3.0";
+ 
+
+ if ($exist:path eq '') then
+
+ else if ($exist:path eq '/') then
+
+ else if ($exist:resource eq 'controller.html') then
+
+ else if (ends-with($exist:resource, '.html')) then
+
+ else if ($exist:resource eq 'demo') then
+
+ else if (contains($exist:path, '/$shared/')) then
+
+ else
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Controller Variables</h2>
+                        <iframe class="stretch" src="http://localhost:8080/exist/apps/xq-institute/demos/controller.html"/>
+                        <p style="font-size: 75%">Visit the page: 
+                        <a target="_blank" href="http://localhost:8080/exist/apps/xq-institute/demos/controller.html">demos/controller.html</a>
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Pipeline Actions</h2>
+                        <br/>
+                        <p>Forward</p>
+                        <p>vs.</p>
+                        <p>Redirect</p>
+                    </section>
+                    <section>
+                        <h2>Dispatch Forward</h2>
+                        <pre class="stretch">
+                            <code class="htmltemplate">
+ else if ($exist:resource eq "controller.html")
+ then
+   &lt;dispatch
+    xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+
+      &lt;view&gt;
+        &lt;forward
+         url="{$exist:controller}/modules/view.xql"&gt;
+
+          &lt;add-parameter name="path"
+           value="{$exist:path}"/&gt;
+          &lt;add-parameter name="resource"
+           value="{$exist:resource}"/&gt;
+
+          &lt;set-attribute name="controller"
+           value="{$exist:controller}"/&gt;
+          &lt;set-attribute name="prefix"
+           value="{$exist:prefix}"/&gt;
+
+        &lt;/forward&gt;
+      &lt;/view&gt;
+      &lt;error-handler&gt;
+
+        &lt;forward
+         url="{$exist:controller}/error-page.html"
+         method="get"/&gt;
+
+        &lt;forward
+         url="{$exist:controller}/modules/view.xql"/&gt;
+
+      &lt;/error-handler&gt;
+   &lt;/dispatch&gt;
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Additional Actions</h2>
+                        <br/>
+                        <ul>
+                            <li>add-parameter</li>
+                            <li>set-attribute</li>
+                            <li>clear-attribute</li>
+                            <li>set-header</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Dispatch Redirect</h2>
+                        <pre class="stretch">
+                            <code>
+ else if ($exist:path eq "/") then
+
+     &lt;dispatch
+      xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+
+         &lt;redirect url="index.html"/&gt;
+
+     &lt;/dispatch&gt;
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Last, But Not Least</h2>
+                        <pre class="stretch">
+                            <code>
+ &lt;dispatch
+  xmlns="http://exist.sourceforge.net/NS/exist"&gt;
+
+     &lt;view&gt;
+         &lt;forward servlet="XSLTServlet"&gt;
+             &lt;set-attribute name="xslt.stylesheet" 
+              value="stylesheets/wrapper.xsl"/&gt;
+         &lt;/forward&gt;
+     &lt;/view&gt;
+
+     &lt;cache-control cache="no"/&gt;
+
+ &lt;/dispatch&gt;
+
+</code>
+                        </pre>
+                    </section>
+                </section>
+                <section>
+                    <h2>A TEI Project</h2>
+                    <br/>
+                    <ul>
+                        <li>Base HTML Template</li>
+                        <li>HTML5 Div for a Document</li>
+                        <li>HTML5 Div for Search Results</li>
+                        <li>HTML5 Div for Browse Page</li>
+                        <li>Controller Configuration<br/>
+                            <br/>RESTful Endpoints?</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        <script src="$root/resources/js/head.min.js"/>
+        <script src="$root/resources/js/reveal.js"/>
+        <script>
+        // https://github.com/hakimel/reveal.js#configuration
+	    Reveal.initialize({
+	        controls: true,
+	        progress: false,
+	        history: true,
+            keyboard: true,
+            center: true,
+		theme: Reveal.getQueryHash().theme,
+		transition: Reveal.getQueryHash().transition || 'default',
+		dependencies: [
+			{ src: '$root/resources/js/classList.js',
+			    condition: function() { return !document.body.classList; }},
+			{ src: '$root/resources/js/highlight/highlight.js', async: true,
+			    callback: function() { hljs.initHighlightingOnLoad(); }}
+		]});
+        </script>
+    </body>
+</html>

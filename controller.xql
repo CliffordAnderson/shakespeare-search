@@ -19,7 +19,7 @@ else if ($exist:path eq "/") then
     </dispatch>
 
 (: An example of the variables passed into the controller.xql :)
-else if (ends-with($exist:resource, "controller-examples.html")) then
+else if ($exist:resource eq "controller.html") then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <view>
             <forward url="{$exist:controller}/modules/view.xql">
@@ -38,6 +38,11 @@ else if (ends-with($exist:resource, "controller-examples.html")) then
 		</error-handler>
     </dispatch>
 
+else if ($exist:resource eq 'demo') then
+    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+        <forward url="{$exist:controller}/modules/demo.xql"/>
+    </dispatch>
+
 (: The HTML page is run through view.xql to expand templates :)
 else if (ends-with($exist:resource, ".html")) then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
@@ -48,6 +53,16 @@ else if (ends-with($exist:resource, ".html")) then
 			<forward url="{$exist:controller}/error-page.html" method="get"/>
 			<forward url="{$exist:controller}/modules/view.xql"/>
 		</error-handler>
+    </dispatch>
+
+(: This lets us reference the root in our page.html template, and have it work
+ : for templates which are not at the webapp's root direction (e.g., demos dir)
+ :)
+else if (contains($exist:path, "/$root/")) then
+    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+        <forward url="{concat($exist:controller, substring-after($exist:path, '/$root'))}">
+            <set-header name="Cache-Control" value="max-age=3600, must-revalidate"/>
+        </forward>
     </dispatch>
 
 (: Resource paths starting with $shared are loaded from the shared-resources app :)

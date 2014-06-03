@@ -1,0 +1,32 @@
+<html>
+    <head>
+        <title>Controller Variables Example</title>
+        <link rel="stylesheet" type="text/css" href="$root/resources/css/style.css"/>
+    </head>
+    <body style="background-color: white; padding-left: 10px;">
+        <div style="font-size: 150%">
+            <dl class="controller-examples">
+                <dt>
+                    <span style="font-weight: bold;">$exist:path</span>&#160;&#160;<span data-template="demo:get-path"/>
+                </dt>
+                <dd>The part of the URL after the controller.</dd>
+                <dt>
+                    <span style="font-weight: bold;">$exist:controller</span>&#160;&#160;<span data-template="demo:get-controller"/>
+                </dt>
+                <dd>The part of the URL leading up to the controller.</dd>
+                <dt>
+                    <span style="font-weight: bold;">$exist:resource</span>&#160;&#160;<span data-template="demo:get-resource"/>
+                </dt>
+                <dd>The part of the URL representing the resource itself.</dd>
+                <dt>
+                    <span style="font-weight: bold;">$exist:prefix</span>&#160;&#160;<span data-template="demo:get-prefix"/>
+                </dt>
+                <dd>A path prefix beneath the root.</dd>
+                <dt>
+                    <span style="font-weight: bold;">$exist:root</span>&#160;&#160;<span data-template="demo:get-root"/>
+                </dt>
+                <dd>The root of the current controller hierarchy, either referencing the file system or a collection in the database.</dd>
+            </dl>
+        </div>
+    </body>
+</html>
