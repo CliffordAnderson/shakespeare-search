@@ -188,7 +188,6 @@
         </div>
         <div style="clear:both;"/>
     </xsl:template>
-  
     <xsl:template match="tei:particDesc//tei:person[tei:persName]">
         <div style="line-height:20px;">
             <xsl:apply-templates/>
@@ -261,7 +260,6 @@
             <xsl:apply-templates/>
         </div>
     </xsl:template>
-  
     <xsl:template match="tei:div2">
         <a name="line-{../@n}.{@n}.0"/>
         <div class="div2">
@@ -634,8 +632,6 @@
     <xsl:template match="tei:ptr[@type='stanza'][@ana='#aaaBcccB'][@n='4' or @n='8']">
         <span class="alignment" style="padding-left:20px;">&#160;</span>
     </xsl:template>
-
-  
     <xsl:template match="tei:ptr[@type='stanza'][key('altRdg',@xml:id)]">
         <xsl:choose>
             <xsl:when test="$rdg = 'lemma'">
@@ -650,8 +646,6 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
-  
     <xsl:template match="tei:ab">
         <span class="indentInline">&#160;</span>
         <xsl:apply-templates/>
