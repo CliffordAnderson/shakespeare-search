@@ -27,7 +27,7 @@
      Author: Kevin S. Clarke <ksclarke@gmail.com>
      Last Updated: 2014/05/24 
 -->
-<project default="xar" name="xq-institute">
+<project default="xar" name="xq-institute" xmlns:xdb="http://exist-db.org/ant">
     <!-- Properties that may vary depending on developer's configuration -->
     <property file="build.properties"/>
 
@@ -52,7 +52,7 @@
 
     <!-- Dumps the current state from the database to the Git file system-->
     <target name="dump-db-files">
-        <xdb:extract xmlns:xdb="http://exist-db.org/ant" destdir="." subcollections="true" createdirectories="true"
+        <xdb:extract destdir="." subcollections="true" createdirectories="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}" overwrite="true"
           user="${db.username}" password="${db.password}" /> <!-- u/p should be configured in build.properties -->
 
@@ -73,7 +73,7 @@
 
     <!-- Updates (destructively) the eXist-db with files from the file system -->
     <target name="update-db">
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir=".">
@@ -82,17 +82,23 @@
                 <include name="*.xml"/>
                 <include name="*.xql"/>
                 <include name="*.html"/>
-                <include name="*.xconf"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
+            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}"
+            user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir=".">
+                <include name="collection.xconf"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/data/plays"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="data/plays">
                 <include name="*.xml"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/modules"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="modules">
@@ -100,76 +106,104 @@
                 <include name="*.xql"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/templates"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="templates">
                 <include name="*.html"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/slides"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="slides">
                 <include name="*.html"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/demos"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="demos">
                 <include name="*.html"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/css">
                 <include name="*.css"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css/theme"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/css/theme">
                 <include name="*.css"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/css/print"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/css/print">
                 <include name="*.css"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/xsl"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/xsl">
                 <include name="*.xsl"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/js">
                 <include name="*.js"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js/highlight"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/js/highlight">
                 <include name="*.js"/>
             </fileset>
         </xdb:store>
-        <xdb:store xmlns:xdb="http://exist-db.org/ant" createcollection="true" createsubcollections="true"
+        <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/js/print-pdf"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/js/print-pdf">
                 <include name="*.js"/>
             </fileset>
         </xdb:store>
+        <xdb:xquery
+            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/"
+            user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            xquery version "3.0";
+            import module namespace sm = "http://exist-db.org/xquery/securitymanager";
+            import module namespace dbutil = "http://exist-db.org/xquery/dbutil";
+            dbutil:scan(xs:anyURI("/db/apps/${project.app}"), function($collection, $resource) {
+                if ($resource) then sm:chgrp($resource, 'guest')
+                else sm:chgrp($collection, 'guest')
+            })
+        </xdb:xquery>
+    </target>
+
+    <target name="reindex-plays">
+        <property name="server-uri" value="xmldb:exist://localhost:8080/exist/xmlrpc"/>
+        <property name="collection" value="/db/apps/xq-institute/data"/>
+        <echo message="Reindexing '${collection}' collection on ${server-uri}"/>
+        <xdb:xquery uri="${server-uri}/db" outputproperty="result"
+         user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            xquery version "3.0";
+            import module namespace xmldb="http://exist-db.org/xquery/xmldb";
+            let $start-time := util:system-time()
+            let $reindex := xmldb:reindex('/db/apps/${project.app}/data')
+            let $end-time := util:system-time()
+            let $runtime-ms := (($end-time - $start-time) div xs:dayTimeDuration('PT1S'))  * 1000 
+            return $runtime-ms
+        </xdb:xquery>
+        <echo message="Reindex performed in ${result} milliseconds."/>
     </target>
 
     <!-- Builds the XAR package for the XQuery Institute demo application -->
