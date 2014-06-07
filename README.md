@@ -40,6 +40,4 @@ As an aside, Git can be really useful for managing the differences between the f
 
 ## Potential Gotchas
 
-If you haven't already, make sure you install the FunctX XQuery library (available through eXist-db's Web-based package manager):
-
-[http://localhost:8080/exist/apps/dashboard/index.html](http://localhost:8080/exist/apps/dashboard/index.html)
+If you haven't already, make sure you install the FunctX XQuery library (available through eXist-db's Web-based package manager): [http://localhost:8080/exist/apps/dashboard/index.html](http://localhost:8080/exist/apps/dashboard/index.html)
