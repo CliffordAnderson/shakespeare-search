@@ -12,7 +12,9 @@ Or downloading the source from:
 
     https://github.com/CliffordAnderson/shakespeare-search/archive/master.zip
 
-The application can be installed by 1) creating and installing a XAR file or by 2) running an installation script.  To create the XAR file, run `ant` from within the project directory:
+The application can be installed by 1) creating and installing a XAR file or by 2) running an installation script.
+
+To create the XAR file, run `ant` from within the project directory:
 
     cd shakespeare-search
     ant
