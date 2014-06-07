@@ -1,4 +1,4 @@
-# Demo Application for the XQuery Institute at Vanderbilt University
+# XQuery Institute Demo Application
 
 This is an XQuery application for searching the plays of Shakespeare.
 
