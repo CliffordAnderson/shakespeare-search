@@ -19,7 +19,7 @@ To create the XAR file, run `ant` from within the project directory:
     cd shakespeare-search
     ant
 
-This will create a .xar file at `${project.dir}/build/xq-institute-0.1.xar`  This XAR file can then be uploaded into eXist-db using the Web-based package manager: http://localhost:8080/exist/apps/dashboard/index.html
+This will create a .xar file at `${project.dir}/build/xq-institute-0.1.xar`  This XAR file can then be uploaded into eXist-db using the Web-based package manager: [http://localhost:8080/exist/apps/dashboard/index.html](http://localhost:8080/exist/apps/dashboard/index.html)
 
 Alternatively, the project can be uploaded into eXist-db through the project's Ant script.  To do this, create a build.properties file by copying the example properties file to a file named `build.properties`:
 
@@ -42,4 +42,4 @@ As an aside, Git can be really useful for managing the differences between the f
 
 If you haven't already, make sure you install the FunctX XQuery library (available through eXist-db's Web-based package manager):
 
-    http://localhost:8080/exist/apps/dashboard/index.html
+    [http://localhost:8080/exist/apps/dashboard/index.html](http://localhost:8080/exist/apps/dashboard/index.html)
