@@ -36,7 +36,7 @@ This will install the files in your database and reindex the plays.  Ant can als
 
 Note that running `update-db` will overwrite any database files with versions from the file system.  Running `dump-db-files` will overwrite files on the file system with versions from the database.
 
-As an aside, Git can be really useful for managing the differences between the file system and database files.  If changes on the file system have been committed to Git before the dump-db-files script is run, then `git diff` can be used to manage the differences that have been introduced by dumping the database files.  It's advised to create a separate Git branch in which to manage the differences.  If you are not familiar with Git, don't worry; it's not required to use this application.  It's just mentioned as one way to manage changes between the file system and the eXist database.
+As an aside, Git can be really useful for managing the differences between the file system and database files.  If changes on the file system have been committed to Git before the dump-db-files script is run, then `git diff` can be used to manage the differences that have been introduced by dumping the database files.  It's advised to create a separate Git branch in which to manage the differences.  If you are not familiar with Git, don't worry; it's not required to use this application.  It's just mentioned as one way to manage changes between the file system and the eXist database.  If you would like to learn more about Git, try this neat [interactive tutorial](http://try.github.io/).
 
 ## Potential Gotchas
 
