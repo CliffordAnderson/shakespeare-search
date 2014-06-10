@@ -1,6 +1,6 @@
 /* Application styles could go here */
 
-.hi { display: inline-block; padding: 5px; background: red; }
+.hi { display: inline-block; padding: 5px; background: #5bc0de; color: white; border-radius: 5px; }
 .controller-examples dt { padding-top: 10px; }
 .controller-examples dd { padding-left: 10px; }
 .green { font-weight: normal; color: green; }

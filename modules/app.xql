@@ -13,7 +13,7 @@ declare variable $app:sort {request:get-parameter('sort', '')};
  : Using user defined functions to modularize code
 :)
 declare %templates:wrap function app:browse-list-items($node as node(), $model as map(*)){
-    for $play in collection($config:app-root || "/data/plays")
+    for $play in collection($config:app-root || "/data/indexed-plays")
     let $title := $play//tei:titleStmt/tei:title/text()
     (: NOTE: construct a more robust function to run through a list of stop words using tokenize?:)
     let $sort-title := replace(replace($title,'^The ',''),'^A ','')
@@ -23,12 +23,12 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
         if($app:sort = 'date') then $date
         else $sort-title
     return 
-        app:display-title($title,$uri)
+        app:display-title($title,$uri,$date)
 }; 
 
-declare function app:display-title($title as xs:string?,$uri as xs:anyURI?){
+declare function app:display-title($title as xs:string?,$uri as xs:anyURI?,$date as xs:string?){
         <li>
-            {$title} <br/>
+            {$title}. [Published: {$date}] <br/>
             <a href="play.html?uri={encode-for-uri($uri)}&amp;view=html">HTML</a> | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=pdf">PDF</a> | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=xml">XML</a>
         </li>
 };
@@ -41,6 +41,7 @@ declare function app:display-title($title as xs:string?,$uri as xs:anyURI?){
 :)
 declare %templates:wrap function app:view-play-html($node as node(), $model as map(*)){
     let $uri := request:get-parameter('uri', '')
+    let $displayURI := replace($uri,'/indexed-plays','/plays')
     let $rec := xmldb:document($uri)
     return transform:transform($rec, doc('../resources/xsl/teiHTML.xsl'),() )
 };
