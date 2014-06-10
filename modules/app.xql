@@ -15,10 +15,10 @@ declare variable $app:sort {request:get-parameter('sort', '')};
 declare %templates:wrap function app:browse-list-items($node as node(), $model as map(*)){
     for $play in collection($config:app-root || "/data/indexed-plays")
     let $title := $play//tei:titleStmt/tei:title/text()
-    (: NOTE: construct a more robust function to run through a list of stop words using tokenize?:)
     let $sort-title := replace(replace($title,'^The ',''),'^A ','')
     let $date := $play//tei:witness[@xml:id = 'shakespeare-online'][1]/tei:date[1]/text()
-    let $uri := base-uri($play)
+    let $play-uri := base-uri($play)
+    let $uri := replace($play-uri,'/indexed-plays','/plays')
     order by 
         if($app:sort = 'date') then $date
         else $sort-title
