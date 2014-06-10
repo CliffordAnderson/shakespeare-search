@@ -10,5 +10,4 @@
     <target>xq-institute</target>
     <prepare>pre-install.xql</prepare>
     <finish/>
-    <deployed>2014-05-18T18:50:17.521-04:00</deployed>
 </meta>

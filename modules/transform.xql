@@ -13,6 +13,15 @@ declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
  NOTE: add in dates
  re-index, change xqueries to use new index. 
 :)
+declare function local:create-element($node as node()*) as node()*{
+    if($node/child::tei:w) then 
+        local:create-word-parent($node)
+    else  element {name($node)} {($node/@*, local:create-element($node/node())}    
+};
+
+declare function  local:create-word-parent($node as node()*) as node()*{
+    element {name($node)} {($node/@*, string-join($node/child::tei:w,' '))}    
+};
 
 for $doc-index in collection('/db/apps/xq-institute/data/plays')[1]
 let $uri := base-uri($doc-index)

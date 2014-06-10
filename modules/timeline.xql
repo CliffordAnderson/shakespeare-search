@@ -22,7 +22,7 @@ declare option exist:serialize "method=json media-type=text/javascript encoding=
         <caption>Dates generated from  http://www.shakespeare-online.com/keydates/playchron.html </caption>
     </asset>
     {
-    for $play in collection('/db/apps/xq-institute/data')
+    for $play in collection('/db/apps/xq-institute/data/indexed-plays')
     let $title := $play//tei:fileDesc/tei:titleStmt/tei:title/text()
     let $pubDate := $play//tei:witness/tei:date/text()
     let $first-performed := $play//xqi:performed/text()
