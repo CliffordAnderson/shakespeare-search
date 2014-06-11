@@ -2,6 +2,8 @@ xquery version "3.0";
 
 (: declare namespace request = "http://exist-db.org/xquery/request"; :)
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
+declare namespace rest = "http://exquery.org/ns/restxq";
+
 declare option exist:serialize "method=html5 media-type=text/html";
 
 <html>
