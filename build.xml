@@ -25,9 +25,9 @@
        6) Rinse. Wash. Repeat.
 
      Author: Kevin S. Clarke <ksclarke@gmail.com>
-     Last Updated: 2014/05/24 
+     Last Updated: 2014/06/11 
 -->
-<project default="xar" name="xq-institute" xmlns:xdb="http://exist-db.org/ant">
+<project default="xar" name="${project.app}" xmlns:xdb="http://exist-db.org/ant">
     <!-- Properties that may vary depending on developer's configuration -->
     <property file="build.properties"/>
 
@@ -87,7 +87,14 @@
         <xdb:store createcollection="true" createsubcollections="true"
             uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}"
             user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
-            <fileset dir=".">
+            <fileset dir="system/config/db/apps/${project.app}">
+                <include name="collection.xconf"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store createcollection="true" createsubcollections="true"
+            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}/data/indexed-plays/"
+            user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="system/config/db/apps/${project.app}/data/indexed-plays">
                 <include name="collection.xconf"/>
             </fileset>
         </xdb:store>
@@ -95,6 +102,13 @@
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/data/plays"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="data/plays">
+                <include name="*.xml"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store createcollection="true" createsubcollections="true"
+            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/data/indexed-plays"
+            user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="data/indexed-plays">
                 <include name="*.xml"/>
             </fileset>
         </xdb:store>
@@ -191,7 +205,7 @@
 
     <target name="reindex-plays">
         <property name="server-uri" value="xmldb:exist://localhost:8080/exist/xmlrpc"/>
-        <property name="collection" value="/db/apps/xq-institute/data"/>
+        <property name="collection" value="/db/apps/${project.app}/data"/>
         <echo message="Reindexing '${collection}' collection on ${server-uri}"/>
         <xdb:xquery uri="${server-uri}/db" outputproperty="result"
          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
