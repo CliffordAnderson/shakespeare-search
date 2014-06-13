@@ -1,11 +1,6 @@
 xquery version "3.0";
 (: module namespace :)
-module namespace facets="http://localhost:8080/exist/apps/xq-institute/facets";
-
-(: Templating modules 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
-import module namespace config="http://localhost:8080/exist/apps/xq-institute/config" at "config.xqm";
-:)
+module namespace facets="http://xqueryinstitute.org/facets";
 
 (: Namespaces used by query :)
 declare namespace util="http://exist-db.org/xquery/util";
@@ -20,9 +15,9 @@ declare function facets:term-callback($term as xs:string, $data as xs:int+) as e
 };
 
 (:~
- : Build facets 
+ : Build facets based on search results
 :)
-declare function facets:facets($hits){
+declare function facets:facets($hits as node()*) as node()*{
 let $callback := util:function(xs:QName("facets:term-callback"), 2)
 (: declare facets as XPath expressions, relative to the search hits :) 
 let $facets := 

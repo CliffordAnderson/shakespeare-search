@@ -1,11 +1,11 @@
 xquery version "3.0";
 (: module namespace :)
-module namespace search="http://localhost:8080/exist/apps/xq-institute/search";
+module namespace search="http://xqueryinstitute.org/search";
 
 (: Templating modules :)
 import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://localhost:8080/exist/apps/xq-institute/config" at "config.xqm";
-import module namespace facets="http://localhost:8080/exist/apps/xq-institute/facets" at "facets.xqm";
+import module namespace facets="http://xqueryinstitute.org/facets" at "facets.xqm";
 (: Import KWIC module for keyword in context display :)
 import module namespace kwic="http://exist-db.org/xquery/kwic" at "resource:org/exist/xquery/lib/kwic.xql";
 (: Namespaces used by query :)
@@ -13,66 +13,187 @@ declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 
-(:
-Running notes:
-add search limit by speaches
-limit speaches by speaker
-
-Add map to search, may help with facets. 
-
-:)
-(: Variables :)
+(: Parameters :)
 declare variable $search:term {request:get-parameter('term','') cast as xs:string};
 declare variable $search:field {request:get-parameter('field','') cast as xs:string};
 declare variable $search:start {request:get-parameter('start',1) cast as xs:integer};
 declare variable $search:records {request:get-parameter('records',10) cast as xs:integer};
-declare variable $search:fq {request:get-parameter('fq','') cast as xs:string};
+(: Facet parameters:)
+declare variable $search:play {request:get-parameter('play','') cast as xs:string};
+declare variable $search:speaker {request:get-parameter('speaker','') cast as xs:string};
+declare variable $search:genre {request:get-parameter('genre','') cast as xs:string};
+declare variable $search:performed {request:get-parameter('performed','') cast as xs:string};
+declare variable $search:date {request:get-parameter('date','') cast as xs:string};
 
 (:~
- : Build browse function for shakespeare plays
- : may be better off using only full text queries, not range, as the taging of every word does odd things to range index
- : NOTE add sort options
- : NOTE need to build facets
- add jump to scene, and hit hightlighting in document if go from search
+ : Construct search string for evaluation
+ : NOTE retool to add query node
 :)
 declare function search:build-search-path(){
-    if($search:field != '') then 
-        if($search:field = 'title') then concat('//tei:titleStmt/tei:title[ft:query(.,"',$search:term,'")]')
-        else if($search:field = 'sp') then concat('//tei:sp[ft:query(.,"',$search:term,'")]')
-        else if($search:field = 'stage') then concat('//tei:stage[ft:query(.,"',$search:term,'")]')
+if($search:field != '') then 
+        if($search:field = 'title') then 
+            concat("//tei:titleStmt/tei:title[ft:query(.,'",$search:term,"')]")
+        else if($search:field = 'sp') then 
+            concat("//tei:sp[ft:query(.,'",$search:term,"')]")
+        else if($search:field = 'stage') then 
+            concat("//tei:stage[ft:query(.,'",$search:term,"')]")
         else ()
-    else concat('//xqi:fulltext[ft:query(.,"',$search:term,'")]')   
+    else concat("//tei:body[ft:query(.,'",$search:term,"')]")  
 };
 
+(:~
+ : String for facet evaluation
+ : not needed?
+:)
 declare function search:build-facet-path(){
     if($search:field != '') then 
-        if($search:field = 'title') then concat('ancestor::tei:TEI/tei:titleStmt/tei:title[ft:query(.,"',$search:term,'")]')
-        else if($search:field = 'sp') then concat('ancestor::tei:TEI/descendant::*/tei:sp[ft:query(.,"',$search:term,'")]')
-        else if($search:field = 'stage') then concat('ancestor::tei:TEI//tei:stage[ft:query(.,"',$search:term,'")]')
+        if($search:field = 'title') then concat("ancestor::tei:TEI/tei:titleStmt/tei:title[ft:query(.,'",$search:term,"')]")
+        else if($search:field = 'sp') then concat("ancestor::tei:sp[ft:query(.,'",$search:term,"')]")
+        else if($search:field = 'stage') then concat("ancestor::tei:stage[ft:query(.,'",$search:term,"')]")
         else ()
-    else concat('ancestor::tei:TEI/xqi:fulltext[ft:query(.,"',$search:term,'")]')   
+    else concat("ancestor::tei:TEI//tei:body[ft:query(.,'",$search:term,"')]")   
+};
+
+declare function search:add-facets() as xs:string*{
+let $title-facet :=
+    if($search:play) then
+        concat("[ancestor::tei:TEI//tei:titleStmt/tei:title"," = '",$search:play,"']")
+    else ()
+let $speaker-facet :=    
+    if($search:speaker) then
+        concat("[ancestor::tei:TEI//tei:speaker"," = '",$search:speaker,"']")
+    else ()
+let $genre-facet :=    
+    if($search:genre) then
+        concat("[ancestor::tei:TEI//xqi:genre"," = '",$search:genre,"']")
+    else ()
+let $performed-facet :=   
+    if($search:performed) then
+        concat("[ancestor::tei:TEI//xqi:performed"," = '",$search:performed,"']")
+    else ()
+let $date-facet :=    
+    if($search:date) then
+        concat("[ancestor::tei:TEI//tei:date"," = '",$search:date,"']")
+    else ()
+return 
+    concat($title-facet,$speaker-facet,$genre-facet,$performed-facet,$date-facet) 
+};
+
+declare function search:decode-facets(){
+let $title-facet :=
+    if($search:play) then
+        concat("Title: ",$search:play," ")
+    else ()
+let $speaker-facet :=    
+    if($search:speaker) then
+        concat("Speaker: ",$search:speaker," ")
+    else ()
+let $genre-facet :=    
+    if($search:genre) then
+        concat("Genre: ",$search:genre," ")
+    else ()
+let $performed-facet :=   
+    if($search:performed) then
+        concat("Performed: ",$search:performed," ")
+    else ()
+let $date-facet :=    
+    if($search:date) then
+        concat("Date: ",$search:date," ")
+    else ()
+return 
+    concat($title-facet,$speaker-facet,$genre-facet,$performed-facet,$date-facet)
+};
+
+(:~
+ : Helper function: create a lucene query from the user input
+ : Tests for quotes in input to create phrase or near matches
+:)
+declare %private function search:create-query() {
+    <query>
+        {
+            if (starts-with($search:term,'"')) then
+                <phrase>{$search:term}</phrase>
+            else
+                <near>{$search:term}</near>
+        }
+    </query>
+};
+
+(:~
+ : Function developed by @joewiz for faster rendering of KWIC 
+:)
+declare function search:milestone-chunk(
+     $ms1 as element(),
+     $ms2 as element(),
+     $node as node()*) as node()*
+{
+    typeswitch ($node)
+    case element() return
+        if ($node is $ms1) then
+            $node
+        else if ( some $n in $node/descendant::* satisfies ($n is $ms1 or $n is $ms2) ) then
+            element { name($node) }
+                {
+                for $i in ( $node/node())
+                return
+                    search:milestone-chunk($ms1, $ms2, $i)
+                }
+        else if ( $node >> $ms1 and $node << $ms2 ) then
+            $node
+        else ()
+    default return
+        if ( $node >> $ms1 and $node << $ms2 ) then
+            $node
+        else ()
+};
+
+(:~
+ : Function developed by @joewiz for faster rendering of KWIC 
+:)
+declare function search:trim-matches($node, $keep) {
+let $matches := $node//exist:match
+return
+    if (count($matches) le $keep) then
+        $node
+    else
+        search:milestone-chunk(subsequence($matches, 1, 1), subsequence($matches, $keep, 1), $node)
 };
 
 
+(:~
+ : Output search results using KWIC
+:)
 declare function search:simple() as node()*{
-    let $path := concat("collection('/db/apps/xq-institute/data')",search:build-search-path())
+    let $path := concat("collection('/db/apps/xq-institute/data/indexed-plays')",search:build-search-path(),search:add-facets())
+    let $query-string := search:build-facet-path()
     let $hits := util:eval($path)
     let $total-hits := count($hits)
     return
-    <div>
-        <div>{search:paging($hits, $total-hits)}</div>
-        {
-         for $hit at $p in subsequence($hits, $search:start, $search:records)
-         let $uri := base-uri($hit)
-         let $title := doc($uri)//tei:titleStmt/tei:title/text()
-         let $scene := if($search:field = 'stage') then <div>{$hit/parent::*/tei:div1/text()}</div> else ()
-         return 
-             <div><span class="title"><a href="play.html?uri={encode-for-uri($uri)}">{$title}</a> [{$uri}]</span>
-                {$scene}
-                 <blockquote><p>{subsequence(kwic:summarize($hit, <config width="40"/>),1,3)}</p></blockquote>
-             </div>
-        }
-     </div>   
+       <div class="row">
+         <div class="col-md-4">
+         {facets:facets($hits)}
+         </div>
+         <div class="col-md-8">
+             <div class="panel" >
+                 <div>
+                    {search:paging($hits, $total-hits)}
+                    {search:decode-facets()}
+                </div>
+                {
+                 for $hit at $p in subsequence($hits, $search:start, $search:records)
+                 let $uri := base-uri($hit)
+                 let $title := $hit/ancestor::tei:TEI//tei:titleStmt/tei:title/text()
+                 let $matches-to-highlight := 2
+                 let $trimmed-hit := search:trim-matches(util:expand($hit),$matches-to-highlight)
+                 let $summary := kwic:summarize($trimmed-hit, <config xmlns="" width="60"/>)
+                 return 
+                     <div><span class="title"><a href="play.html?uri={encode-for-uri($uri)}">{$title}</a></span>
+                        <blockquote><p>{$summary}</p></blockquote>
+                     </div>
+                }
+             </div> 
+         </div>
+      </div>        
 };
 
 (:~
@@ -81,7 +202,7 @@ declare function search:simple() as node()*{
  : @param $hits passed from search:simple()
  : NOTE add test to deactive next and prev if at begining or end
 :)
-declare function search:paging($hits as node()*, $total-hits as xs:integer*){
+declare function search:paging($hits as node()*, $total-hits as xs:integer*) as node(){
 (: get all parameters to pass to paging function, minus start param :)
 let $url-params := replace(request:get-query-string(), '&amp;start=\d+', '')
 let $start := if($search:start) then $search:start else 1
@@ -124,18 +245,7 @@ return
 };
 
 declare %templates:wrap function search:display-results($node as node(), $model as map(*)){
-let $query-string := search:build-facet-path()
-return
  if($search:term !='') then  
-    <div class="row">
-        <div class="col-md-4">
-            {facets:facets($query-string)}
-        </div>
-        <div class="col-md-8">
-            <div class="panel" >
-                {search:simple()}
-            </div>
-        </div>
-    </div>
+    search:simple()
  else ()
 };
