@@ -8,13 +8,14 @@ xquery version "3.0";
 import module namespace templates="http://exist-db.org/xquery/templates" ;
 
 (: 
- : The following modules provide functions which will be called by the templating.
+ : The following modules provide functions which will be called by the templating. 
  :)
 import module namespace config="http://localhost:8080/exist/apps/xq-institute/config" at "config.xqm";
 import module namespace app="http://localhost:8080/exist/apps/xq-institute/templates" at "app.xql";
-import module namespace alchemy="http://localhost:8080/exist/apps/xq-institute/alchemy" at "alchemy.xqm";
-import module namespace search="http://localhost:8080/exist/apps/xq-institute/search" at "search.xqm";
-import module namespace facets="http://localhost:8080/exist/apps/xq-institute/facets" at "facets.xqm";
+import module namespace alchemy="http://xqueryinstitute.org/alchemy" at "alchemy.xqm";
+import module namespace search="http://xqueryinstitute.org/search" at "search.xqm";
+import module namespace play="http://xqueryinstitute.org/play" at "view-play.xqm";
+import module namespace facets="http://xqueryinstitute.org/facets" at "facets.xqm";
 import module namespace demo="http://xqueryinstitute.org/demo" at "demo.xqm";
 
 declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";
