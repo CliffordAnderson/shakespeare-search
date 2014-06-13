@@ -1,0 +1,243 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>RESTful XQuery</title>
+        <meta name="description" content="RESTful XQuery"/>
+        <meta name="author" content="Kevin S. Clarke"/>
+        <meta name="apple-mobile-web-app-capable" content="yes"/>
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+        <link rel="stylesheet" href="$root/resources/css/reveal.css"/>
+        <link rel="stylesheet" href="$root/resources/css/zenburn.css"/>
+        <link rel="stylesheet" href="$root/resources/css/theme/xqi.css" id="theme"/>
+        <script>
+        if (window.location.search.match(/print-pdf/gi)) {
+		    var link = document.createElement('link');
+		    link.rel = 'stylesheet';
+		    link.type = 'text/css';
+		    link.href = '$root/resources/css/print/pdf.css';
+		    document.getElementsByTagName('head')[0].appendChild(link);
+	    }
+        </script>
+    </head>
+    <body>
+        <div class="reveal">
+            <div class="slides">
+                <section>
+                    <h1>REST<span style="font-size: smaller;">ful</span> XQuery</h1>
+                </section>
+                <section>
+                    <h1>REST</h1>
+                    <br/>
+                    <h2>(RE)presentational (S)tate (T)ransfer</h2>
+                    <aside class="notes">
+                        <p>An architectural style first expressed by Roy Fielding in his PhD dissertation.</p>
+                        <p>Used by many to describe the desired architecture for the World Wide Web.</p>
+                        <p>Fielding used REST to design HTTP 1.1 and Uniform Resource Identifiers (URIs).</p>
+                        <p>An alternative, simpler Web services architecture (in contrast to SOAP).</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>Architecture</h2>
+                    <br/>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">Components</li>
+                        <li style="padding: 10px;">Connectors</li>
+                        <li style="padding: 10px;">Data</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>A component is an abstract unit of software instructions and internal state that provides a transformation of data via its interface.</p>
+                        <p>A connector is an abstract mechanism that mediates communication, coordination, or cooperation among components</p>
+                        <p>Data is an element of information that is transferred from a component, or received by a component, via a connector</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>Properties</h2>
+                    <br/>
+                    <ul>
+                        <li style="padding: 10px;">Performant</li>
+                        <li style="padding: 10px;">Scalable</li>
+                        <li style="padding: 10px;">Simple Interfaces</li>
+                        <li style="padding: 10px;">Modifiable</li>
+                        <li style="padding: 10px;">Visible Communications</li>
+                        <li style="padding: 10px;">Portable</li>
+                        <li style="padding: 10px;">Reliable</li>
+                    </ul>
+                    <aside class="notes">Should I really go over all these or just the highlights?</aside>
+                </section>
+                <section>
+                    <h2>Architectural Constraints</h2>
+                    <br/>
+                    <ul>
+                        <li style="padding: 10px;">Client-Server</li>
+                        <li style="padding: 10px;">Stateless</li>
+                        <li style="padding: 10px;">Cacheable</li>
+                        <li style="padding: 10px;">Layered</li>
+                        <li style="padding: 10px;">Code on Demand (optional)</li>
+                        <li style="padding: 10px;">Uniform Interface</li>
+                    </ul>
+                    <aside class="notes">Should I really go over all these or just the highlights?</aside>
+                </section>
+                <section>
+                    <h2>REST in eXist-db Web Services</h2>
+                    <br/>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">GET</li>
+                        <li style="padding: 10px;">DELETE</li>
+                        <li style="padding: 10px;">PUT</li>
+                        <li style="padding: 10px;">POST</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>RESTful interface provided out of the box with eXist.</p>
+                        <p>You don't have to do anything to take advantage of it.</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>GET</h2>
+                    <br/>
+                    <p>With optional HTTP parameters</p>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">_query</li>
+                        <li style="padding: 10px;">_xsl</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>Example: Getting an XML list of plays from the 'plays' directory.</p>
+                        <p>Retrieves a representation of the resource or collection from the database. XQuery and XPath queries may also be specified using GET's optional parameters applied to the selected resource.</p>
+                        <p>Demonstrate pragmatic uses of "_query=" and "_xsl=" parameters.</p>
+                        <p>http://localhost:8080/exist/rest/apps/xq-institute/data/plays/H8.xml?_query=//*:titleStmt</p>
+                        <p>Example: http://localhost:8080/exist/rest/apps/xq-institute/data/plays/H8.xml?_xsl=../../resources/xsl/teiHTML.xsl</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>DELETE</h2>
+                    <aside class="notes">
+                        <p>Example: Deleting a play from the 'plays' directory.</p>
+                        <p>Removes a resource (document or collection) from the database.</p>
+                        <p>DELETE: http://localhost:8080/exist/rest/apps/xq-institute/data/plays/H8.xml</p>
+                        <p>Afterwards check: http://localhost:8080/exist/apps/xq-institute/data/plays</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>PUT</h2>
+                    <aside class="notes">
+                        <p>Example: PUT a play into the 'plays' directory.</p>
+                        <p>Uploads a resource onto the database. If required, collections are automatically created, and existing resources are overwritten.</p>
+                        <p>PUT: http://localhost:8080/exist/rest/apps/xq-institute/data/plays/H8.xml</p>
+                        <p>Afterwards check: http://localhost:8080/exist/apps/xq-institute/data/plays</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>POST</h2>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">XQuery</li>
+                        <li style="padding: 10px;">XUpdate</li>
+                    </ul>
+                    <aside class="notes">
+                        <p>Example: POST a play into the 'plays' directory.</p>
+                        <p>Submits data in the form of an XML fragment in the content of the request which specifies the action to take. The fragment can be either an XUpdate document or a query request. Query requests are used to pass complex XQuery expressions too large to be URL-encoded.</p>
+                        <p>Example: An XQuery script</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>Stored XQueries</h2>
+                    <br/>
+                    <p>
+                        <a target="_blank" href="http://localhost:8080/exist/rest/apps/xq-institute/modules/demo.xql">(demo)</a>
+                    </p>
+                </section>
+                <section>
+                    <h2>RESTXQ</h2>
+                    <br/>
+                    <p>Annotations</p>
+                    <aside class="notes">
+                        <p>XQuery 3.0 adds annotations: %public and %private (and says implementations can define more that are implementation specific)</p>
+                        <p>Adam Retter, an eXist-db developer, looked at JSR-311: Java Annotations for REST and envisioned something like them for XQuery</p>
+                        <p>"Metaprogramming"</p>
+                        
+                    where to find restxq endpoints: http://localhost:8080/exist/restxq/topage</aside>
+                </section>
+                <section>
+                    <h2>Configuring RESTXQ</h2>
+                    <pre class="stretch">
+                        <code class="htmltemplate">
+
+ &lt;triggers&gt;
+  &lt;trigger class=
+   "org.exist.extensions.exquery.restxq.impl.RestXqTrigger"
+  /&gt;
+ &lt;/triggers&gt;
+</code>
+                    </pre>
+                    <aside class="notes">
+                        <p>XQuery and Java implementations exist</p>
+                        <p>XQuery version can hook into controller</p>
+                        <p>Java version will replace the XQuery version (and eventually the controller too)</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>The Basics</h2>
+                    <ul>
+                        <li>
+                            <span class="green">%rest</span>:<span class="purple">GET</span>
+                        </li>
+                        <li>
+                            <span class="green">%rest</span>:<span class="purple">path()</span>
+                        </li>
+                        <li>
+                            <span class="green">%output</span>:<span class="purple">media-type()</span>
+                        </li>
+                        <li>
+                            <span class="green">%output</span>:<span class="purple">method()</span>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>An Example</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+
+declare
+    %rest:GET
+    %rest:path("/shakespeare/plays")
+    %output:media-type("text/html")
+    %output:method("html5")
+function demo:show-plays() {
+    demo:htmlify(demo:list-plays())
+};
+</code>
+                    </pre>
+                </section>
+                <section>
+                    <h2>Useful Links</h2>
+                    <ul>
+                        <li>
+                            <a href="http://restcookbook.com/">The REST Cookbook</a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/exquery/exquery/blob/master/exquery-restxq-specification/restxq-1.0-specification.html">RESTXQ 1.0 Specification</a>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        <script src="$root/resources/js/head.min.js"/>
+        <script src="$root/resources/js/reveal.js"/>
+        <script>
+        // https://github.com/hakimel/reveal.js#configuration
+	    Reveal.initialize({
+	        controls: true,
+	        progress: false,
+	        history: true,
+            keyboard: true,
+            center: true,
+		theme: Reveal.getQueryHash().theme,
+		transition: Reveal.getQueryHash().transition || 'default',
+		dependencies: [
+			{ src: '$root/resources/js/classList.js',
+			    condition: function() { return !document.body.classList; }},
+			{ src: '$root/resources/js/highlight/highlight.js', async: true,
+			    callback: function() { hljs.initHighlightingOnLoad(); }}
+		]});
+        </script>
+    </body>
+</html>

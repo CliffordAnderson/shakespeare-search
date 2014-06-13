@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/xq-institute" abbrev="xq-institute" version="0.4" spec="1.0">
+<package xmlns="http://expath.org/ns/pkg" name="http://localhost:8080/exist/apps/xq-institute" abbrev="xq-institute" version="0.1" spec="1.0">
     <title>XQuery Summer Institute Demo App</title>
     <dependency package="http://exist-db.org/apps/shared"/>
 </package>
