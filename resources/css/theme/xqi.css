@@ -171,3 +171,6 @@ code, pre {
 .small-links {
     font-size: 50%;
 }
+
+.green { font-weight: normal; color: green; }
+.purple { font-weight: normal; color: purple; }

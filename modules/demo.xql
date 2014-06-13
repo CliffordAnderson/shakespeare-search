@@ -27,9 +27,6 @@ declare option exist:serialize "method=html5 media-type=text/html";
             </table>
         </p>
         <p>{
-            request:get-parameter('stuff', '')
-        }</p>
-        <p>{
             rest:resource-functions()
         }</p>
     </body>

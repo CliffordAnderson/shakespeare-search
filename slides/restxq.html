@@ -29,7 +29,7 @@
                 <section>
                     <h1>REST</h1>
                     <br/>
-                    <h2>REpresentational State Transfer</h2>
+                    <h2>(RE)presentational (S)tate (T)ransfer</h2>
                     <aside class="notes">
                         <p>An architectural style first expressed by Roy Fielding in his PhD dissertation.</p>
                         <p>Used by many to describe the desired architecture for the World Wide Web.</p>
@@ -40,10 +40,10 @@
                 <section>
                     <h2>Architecture</h2>
                     <br/>
-                    <ul>
-                        <li>Components</li>
-                        <li>Connectors</li>
-                        <li>Data</li>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">Components</li>
+                        <li style="padding: 10px;">Connectors</li>
+                        <li style="padding: 10px;">Data</li>
                     </ul>
                     <aside class="notes">
                         <p>A component is an abstract unit of software instructions and internal state that provides a transformation of data via its interface.</p>
@@ -55,13 +55,13 @@
                     <h2>Properties</h2>
                     <br/>
                     <ul>
-                        <li>Performant</li>
-                        <li>Scalable</li>
-                        <li>Simple Interfaces</li>
-                        <li>Modifiable</li>
-                        <li>Visible Communications</li>
-                        <li>Portable</li>
-                        <li>Reliable</li>
+                        <li style="padding: 10px;">Performant</li>
+                        <li style="padding: 10px;">Scalable</li>
+                        <li style="padding: 10px;">Simple Interfaces</li>
+                        <li style="padding: 10px;">Modifiable</li>
+                        <li style="padding: 10px;">Visible Communications</li>
+                        <li style="padding: 10px;">Portable</li>
+                        <li style="padding: 10px;">Reliable</li>
                     </ul>
                     <aside class="notes">Should I really go over all these or just the highlights?</aside>
                 </section>
@@ -69,17 +69,24 @@
                     <h2>Architectural Constraints</h2>
                     <br/>
                     <ul>
-                        <li>Client-Server</li>
-                        <li>Stateless</li>
-                        <li>Cacheable</li>
-                        <li>Layered</li>
-                        <li>Code on Demand (optional)</li>
-                        <li>Uniform Interface</li>
+                        <li style="padding: 10px;">Client-Server</li>
+                        <li style="padding: 10px;">Stateless</li>
+                        <li style="padding: 10px;">Cacheable</li>
+                        <li style="padding: 10px;">Layered</li>
+                        <li style="padding: 10px;">Code on Demand (optional)</li>
+                        <li style="padding: 10px;">Uniform Interface</li>
                     </ul>
                     <aside class="notes">Should I really go over all these or just the highlights?</aside>
                 </section>
                 <section>
-                    <h2>REST in eXist-db</h2>
+                    <h2>REST in eXist-db Web Services</h2>
+                    <br/>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">GET</li>
+                        <li style="padding: 10px;">DELETE</li>
+                        <li style="padding: 10px;">PUT</li>
+                        <li style="padding: 10px;">POST</li>
+                    </ul>
                     <aside class="notes">
                         <p>RESTful interface provided out of the box with eXist.</p>
                         <p>You don't have to do anything to take advantage of it.</p>
@@ -87,6 +94,12 @@
                 </section>
                 <section>
                     <h2>GET</h2>
+                    <br/>
+                    <p>With optional HTTP parameters</p>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">_query</li>
+                        <li style="padding: 10px;">_xsl</li>
+                    </ul>
                     <aside class="notes">
                         <p>Example: Getting an XML list of plays from the 'plays' directory.</p>
                         <p>Retrieves a representation of the resource or collection from the database. XQuery and XPath queries may also be specified using GET's optional parameters applied to the selected resource.</p>
@@ -115,6 +128,10 @@
                 </section>
                 <section>
                     <h2>POST</h2>
+                    <ul style="list-style-type:none; margin: 10px;">
+                        <li style="padding: 10px;">XQuery</li>
+                        <li style="padding: 10px;">XUpdate</li>
+                    </ul>
                     <aside class="notes">
                         <p>Example: POST a play into the 'plays' directory.</p>
                         <p>Submits data in the form of an XML fragment in the content of the request which specifies the action to take. The fragment can be either an XUpdate document or a query request. Query requests are used to pass complex XQuery expressions too large to be URL-encoded.</p>
@@ -122,11 +139,80 @@
                     </aside>
                 </section>
                 <section>
-                    <aside class="notes">where to find restxq endpoints: http://localhost:8080/exist/restxq/page</aside>
+                    <h2>Stored XQueries</h2>
+                    <br/>
+                    <p>
+                        <a target="_blank" href="http://localhost:8080/exist/rest/apps/xq-institute/modules/demo.xql">(demo)</a>
+                    </p>
+                </section>
+                <section>
+                    <h2>RESTXQ</h2>
+                    <br/>
+                    <p>Annotations</p>
+                    <aside class="notes">
+                        <p>XQuery 3.0 adds annotations: %public and %private (and says implementations can define more that are implementation specific)</p>
+                        <p>Adam Retter, an eXist-db developer, looked at JSR-311: Java Annotations for REST and envisioned something like them for XQuery</p>
+                        <p>"Metaprogramming"</p>
+                        
+                    where to find restxq endpoints: http://localhost:8080/exist/restxq/topage</aside>
+                </section>
+                <section>
+                    <h2>Configuring RESTXQ</h2>
+                    <pre class="stretch">
+                        <code class="htmltemplate">
+
+ &lt;triggers&gt;
+  &lt;trigger class=
+   "org.exist.extensions.exquery.restxq.impl.RestXqTrigger"
+  /&gt;
+ &lt;/triggers&gt;
+</code>
+                    </pre>
+                    <aside class="notes">
+                        <p>XQuery and Java implementations exist</p>
+                        <p>XQuery version can hook into controller</p>
+                        <p>Java version will replace the XQuery version (and eventually the controller too)</p>
+                    </aside>
+                </section>
+                <section>
+                    <h2>The Basics</h2>
+                    <ul>
+                        <li>
+                            <span class="green">%rest</span>:<span class="purple">GET</span>
+                        </li>
+                        <li>
+                            <span class="green">%rest</span>:<span class="purple">path()</span>
+                        </li>
+                        <li>
+                            <span class="green">%output</span>:<span class="purple">media-type()</span>
+                        </li>
+                        <li>
+                            <span class="green">%output</span>:<span class="purple">method()</span>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>An Example</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+
+declare
+    %rest:GET
+    %rest:path("/shakespeare/plays")
+    %output:media-type("text/html")
+    %output:method("html5")
+function demo:show-plays() {
+    demo:htmlify(demo:list-plays())
+};
+</code>
+                    </pre>
                 </section>
                 <section>
                     <h2>Useful Links</h2>
                     <ul>
+                        <li>
+                            <a href="http://restcookbook.com/">The REST Cookbook</a>
+                        </li>
                         <li>
                             <a href="https://github.com/exquery/exquery/blob/master/exquery-restxq-specification/restxq-1.0-specification.html">RESTXQ 1.0 Specification</a>
                         </li>
