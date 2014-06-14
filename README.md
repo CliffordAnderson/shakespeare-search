@@ -41,3 +41,19 @@ As an aside, Git can be really useful for managing the differences between the f
 ## Potential Gotchas
 
 If you haven't already, make sure you install the FunctX XQuery library (available through eXist-db's Web-based package manager): [http://localhost:8080/exist/apps/dashboard/index.html](http://localhost:8080/exist/apps/dashboard/index.html)
+
+If you're using a copy of eXist-db that's been cloned from the GitHub repository, you'll need to explictly turn on the XSL:FO processor.  To do this, from within the eXist project directory, type:
+
+    cp extensions/build.properties extensions/local.build.properties
+
+Then use a text editor to change:
+
+    include.module.xslfo = false
+
+to:
+
+    include.module.xslfo = true
+
+in the extensions/local.build.properties file.
+
+After this, build the project again (using `./build.sh` on Linux/Mac and `build.bat` on Windows) and you will be good to go.
