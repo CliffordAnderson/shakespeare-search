@@ -57,3 +57,5 @@ to:
 in the extensions/local.build.properties file.
 
 After this, build the project again (using `./build.sh` on Linux/Mac and `build.bat` on Windows) and you will be good to go.
+
+See also: http://en.wikibooks.org/wiki/XQuery/Generating_PDF_from_XSL-FO_files
