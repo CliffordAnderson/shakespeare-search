@@ -153,21 +153,21 @@
                         <p>XQuery 3.0 adds annotations: %public and %private (and says implementations can define more that are implementation specific)</p>
                         <p>Adam Retter, an eXist-db developer, looked at JSR-311: Java Annotations for REST and envisioned something like them for XQuery</p>
                         <p>"Metaprogramming"</p>
-                        
-                    where to find restxq endpoints: http://localhost:8080/exist/restxq/topage</aside>
+                    </aside>
                 </section>
                 <section>
                     <h2>Configuring RESTXQ</h2>
                     <pre class="stretch">
                         <code class="htmltemplate">
-
  &lt;triggers&gt;
   &lt;trigger class=
    "org.exist.extensions.exquery.restxq.impl.RestXqTrigger"
   /&gt;
  &lt;/triggers&gt;
+ 
 </code>
                     </pre>
+                    <p>(May already be configured)</p>
                     <aside class="notes">
                         <p>XQuery and Java implementations exist</p>
                         <p>XQuery version can hook into controller</p>
@@ -190,20 +190,192 @@
                             <span class="green">%output</span>:<span class="purple">method()</span>
                         </li>
                     </ul>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <p style="font-size: 60%">
+                        <a href="http://exquery.github.io/exquery/exquery-restxq-specification/restxq-1.0-specification.html">http://exquery.github.io/exquery/exquery-restxq-specification/restxq-1.0-specification.html</a>
+                    </p>
+                    <p style="font-size: 60%; padding-top: 10px;">
+                        <a href="http://www.w3.org/2010/xslt-xquery-serialization">http://www.w3.org/2010/xslt-xquery-serialization</a>
+                    </p>
                 </section>
                 <section>
-                    <h2>An Example</h2>
+                    <h2>A Basic Example</h2>
                     <pre class="stretch">
                         <code class="javascript">
+ declare
+     %rest:GET
+     %rest:path("/shakespeare/plays")
+     %output:media-type("text/html")
+     %output:method("html5")
+ function demo:get-plays-html() {
+     demo:htmlify(demo:list-plays())
+ };
 
-declare
-    %rest:GET
-    %rest:path("/shakespeare/plays")
-    %output:media-type("text/html")
-    %output:method("html5")
-function demo:show-plays() {
-    demo:htmlify(demo:list-plays())
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/plays">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>Example's Code</h2>
+                    <pre class="stretch">
+                        <code>
+ declare
+   %private
+ function demo:list-plays() as element(plays) {
+   &lt;plays&gt;{
+     for $play
+       in collection('/db/apps/xq-institute/data/plays')
+     return 
+       &lt;play&gt;
+         &lt;id&gt;{
+           $play//tei:publicationStmt/tei:idno/text()
+         }&lt;/id&gt;
+         &lt;title&gt;{
+           $play//tei:titleStmt/tei:title/text()
+         }&lt;/title&gt;
+         &lt;author&gt;{
+           $play//tei:titleStmt/tei:author/text()
+         }&lt;/author&gt;
+         &lt;updateDate&gt;{
+           $play//tei:publicationStmt/tei:date/text()
+         }&lt;/updateDate&gt;
+       &lt;/play&gt;
+   }&lt;/plays&gt;
+ };
+
+ declare
+   %private
+ function demo:htmlify($plays as element(plays))
+     as element(html) {
+   &lt;html&gt;
+     &lt;head&gt;
+       &lt;title&gt;Simple List of Plays&lt;/title&gt;
+     &lt;/head&gt;
+     &lt;body&gt;
+       &lt;p style="padding: 15px;"&gt;
+         &lt;table width="33%"&gt;
+           &lt;tr&gt;
+             &lt;th style="text-align:left"&gt;Title&lt;/th&gt;
+             &lt;th style="text-align:left"&gt;Author&lt;/th&gt;
+           &lt;/tr&gt;
+           {
+             for $play in $plays/play
+             return 
+               &lt;tr&gt;
+                 &lt;td&gt;{$play/title/text()}&lt;/td&gt;
+                 &lt;td&gt;{$play/author/text()}&lt;/td&gt;
+               &lt;/tr&gt;
+           }
+         &lt;/table&gt;
+       &lt;/p&gt;
+     &lt;/body&gt;
+   &lt;/html&gt;
+ };
+
+</code>
+                    </pre>
+                </section>
+                <section>
+                    <h2>With JSON Output</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+     %rest:GET
+     %rest:path("/shakespeare/plays/json")
+     %output:media-type("application/json")
+     %output:method("json")
+ function demo:get-plays-json() {
+     demo:list-plays()
+ };
+ 
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/plays/json">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>With Atom Output</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+     %rest:GET
+     %rest:path("/shakespeare/plays/atom")
+     %output:media-type("application/atom+xml")
+     %output:method("xml")
+ function demo:get-plays-atom() {
+     demo:atomify(demo:list-plays())
+ };
+
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/plays/atom">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>Atom Feed's Code</h2>
+                    <pre class="stretch">
+                        <code>
+ declare
+   %private
+ function demo:list-plays() as element(plays) {
+   &lt;plays&gt;{
+     for $play
+       in collection('/db/apps/xq-institute/data/plays')
+     return 
+       &lt;play&gt;
+         &lt;id&gt;{
+           $play//tei:publicationStmt/tei:idno/text()
+         }&lt;/id&gt;
+         &lt;title&gt;{
+           $play//tei:titleStmt/tei:title/text()
+         }&lt;/title&gt;
+         &lt;author&gt;{
+           $play//tei:titleStmt/tei:author/text()
+         }&lt;/author&gt;
+         &lt;updateDate&gt;{
+           $play//tei:publicationStmt/tei:date/text()
+         }&lt;/updateDate&gt;
+       &lt;/play&gt;
+   }&lt;/plays&gt;
+ };
+
+ declare
+   %private
+ function demo:atomify($plays as element(plays))
+     as element(feed) {
+   &lt;atom:feed xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+     &lt;atom:id&gt;{
+       $server}/restxq/shakespeare/plays/atom&lt;/atom:id&gt;
+     &lt;atom:title&gt;Example Atom Feed&lt;/atom:title&gt;
+     &lt;atom:link rel="self"
+       href="{$server}/restxq/shakespeare/plays/atom"/&gt;
+     &lt;atom:updated&gt;{current-dateTime()}&lt;/atom:updated&gt;
+     {
+     (:
+       Update dates aren't in the right format,
+       but we'll pretend they are..
+     :)
+     for $play in $plays/play
+     let $id := $play/id/text()
+     return
+       &lt;atom:entry&gt;
+       &lt;atom:title&gt;{$play/title/text()}&lt;/atom:title&gt;
+       &lt;atom:author&gt;
+         &lt;atom:name&gt;{$play/author/text()}&lt;/atom:name&gt;
+       &lt;/atom:author&gt;
+       &lt;atom:link href="{
+         $server}/restxq/shakespeare/play/{$id}"/&gt;
+       &lt;atom:id&gt;{$server}/restxq/shakespeare/play/{
+         $id}&lt;/atom:id&gt;
+       &lt;atom:updated&gt;{
+         $play/updateDate/text()
+       }&lt;/atom:updated&gt;
+       &lt;/atom:entry&gt;
+     }
+   &lt;/atom:feed&gt;
 };
+
 </code>
                     </pre>
                 </section>
@@ -223,13 +395,15 @@ function demo:show-plays() {
         <script src="$root/resources/js/head.min.js"/>
         <script src="$root/resources/js/reveal.js"/>
         <script>
-        // https://github.com/hakimel/reveal.js#configuration
+        // https://github.com/hakimel/reveal.js#configuration (w/h was 960 x 700)
 	    Reveal.initialize({
 	        controls: true,
 	        progress: false,
 	        history: true,
             keyboard: true,
             center: true,
+            width: 1024,
+            height: 764,
 		theme: Reveal.getQueryHash().theme,
 		transition: Reveal.getQueryHash().transition || 'default',
 		dependencies: [
