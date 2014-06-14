@@ -6,6 +6,7 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
 
+declare option exist:serialize "method=xml media-type=text/xml omit-xml-declaration=no indent=yes";
 (:~
  : Add fulltext fields for faster indexing. 
  : Uses locally defined namespace to differentiate between local and tei elements
@@ -13,21 +14,14 @@ declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
  NOTE: add in dates
  re-index, change xqueries to use new index. 
 :)
-declare function local:create-element($node as node()*) as node()*{
-    if($node/child::tei:w) then 
-        local:create-word-parent($node)
-    else  element {name($node)} {($node/@*, local:create-element($node/node())}    
-};
 
-declare function  local:create-word-parent($node as node()*) as node()*{
-    element {name($node)} {($node/@*, string-join($node/child::tei:w,' '))}    
-};
 
-for $doc-index in collection('/db/apps/xq-institute/data/plays')[1]
+(xmldb:login('/db/apps/xq-institute','admin',''),
+for $doc-index in collection('/db/apps/xq-institute/data/plays')
 let $uri := base-uri($doc-index)
 let $doc := xmldb:document($uri)/tei:TEI
 let $doc-name := util:document-name($doc)
 let $newDoc := transform:transform($doc, doc('../resources/xsl/tei-to-tei.xsl'),() )
-return $newDoc
-    (:xmldb:store('/db/apps/xq-institute/data/indexed-plays', $doc-name, $newDoc):)
+return 
+    xmldb:store('/db/apps/xq-institute/data/indexed-plays', $doc-name, $newDoc))
   
