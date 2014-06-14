@@ -9,10 +9,10 @@ br { clear:both; }
 .pageNbr { float:left; width:75px; }
 .pageTitle { float:left; width:240px; text-align:center; font-style:italic; font-size:14pt; }
 .pageDesc { float:right; text-align:right; font-size:8pt; font-variant:small-caps; }
-.actFooter { width:430px; text-align:center; padding-top:5px; }
+.actFooter {text-align:center; padding-top:.5em; clear:both; background-color:#eee; border-top:1px solid #333; padding:.5em; margin:1em 0;}
 .titleImg { width: 400px; padding: 0px 20px; }
 
-.div1 { text-align:left; width:100%; }
+.div1 { text-align:left; width:100%; margin-bottom:1em;}
 .charHeader { position:relative; width:480px; text-align:center; font-weight:bold; font-size:16pt; margin-bottom:50px; margin-top:10px;}
 .castDiv { position:relative; float:left; }
 .bracketDiv { position:relative; float:left; padding:0px 5px; width:5px; }

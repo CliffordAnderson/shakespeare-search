@@ -17,7 +17,9 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
     for $play in collection($config:app-root || "/data/indexed-plays")
     let $title := $play//tei:titleStmt/tei:title/text()
     let $sort-title := replace(replace($title,'^The ',''),'^A ','')
-    let $date := $play//tei:witness[@xml:id = 'shakespeare-online'][1]/tei:date[1]/text()
+    let $date := 
+        if($play//tei:witness[@xml:id = 'shakespeare-online']) then $play//tei:witness[@xml:id = 'shakespeare-online'][1]/tei:date[1]/text() 
+        else ()
     let $death := count($play//tei:death)
     let $play-uri := base-uri($play)
     let $uri := replace($play-uri,'/indexed-plays','/plays')
@@ -38,9 +40,17 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
 declare function app:display-title($title as xs:string?,$uri as xs:anyURI?,$date as xs:string?, $death as xs:integer?) as node()*{
         <li>
             <span class="title">{$title}.</span>
-            <span class="text-info">Published: </span> {$date}<br/> 
+            <span>
+                {if($date) then  
+                    <div class="text-info">Published: {$date} </div> 
+                else ()
+                }
+            </span>
             <span class="text-info"> Mortality Rate: </span> {$death}<br/>
-            <a href="play.html?uri={encode-for-uri($uri)}&amp;view=html">HTML</a> | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=pdf">PDF</a> | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=xml">XML</a>
+            <a href="play.html?uri={encode-for-uri($uri)}&amp;view=html">HTML</a> 
+            | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=pdf">PDF</a> 
+            | <a href="modules/view-play.xql?uri={encode-for-uri($uri)}&amp;view=xml">XML</a>
+             | <a href="play-stats.html?uri={encode-for-uri($uri)}&amp;view=html">Play Statistics</a>
         </li>
 };
 

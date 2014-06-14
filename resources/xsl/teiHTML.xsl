@@ -1,27 +1,34 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:local="http://www.pantor.com/ns/local" xmlns:estr="http://exslt.org/strings" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xd="http://www.pnp-software.com/XSLTdoc" xmlns:exsl="http://exslt.org/common" version="2.0">
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:edate="http://exslt.org/dates-and-times" xmlns:teix="http://www.tei-c.org/ns/Examples" xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:html="http://www.w3.org/1999/xhtml" xmlns:estr="http://exslt.org/strings" xmlns:local="http://www.pantor.com/ns/local" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:exsl="http://exslt.org/common" xmlns:xd="http://www.pnp-software.com/XSLTdoc" version="2.0">
     <xsl:template match="/">
         <div class="row">
             <div class="col-md-12">
                 <xsl:apply-templates select="//tei:titleStmt"/>
-                <div class="panel-group" id="accordion">
-                    <div class="panel-group" id="accordion">
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                        Characters in the Play
-                                    </a>
-                                </h4>
-                            </div>
-                            <div id="collapseOne" class="panel-collapse collapse in">
-                                <div class="panel-body">
-                                    <xsl:apply-templates select="//tei:profileDesc/tei:particDesc" mode="list-char"/>
+                <div class="row">
+                    <div class="col-md-8">
+                        <xsl:apply-templates select="//tei:body"/>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="panel-group" id="accordion">
+                            <div class="panel-group" id="accordion">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                                                Characters in the Play
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse in">
+                                        <div class="panel-body">
+                                            <xsl:apply-templates select="//tei:profileDesc/tei:particDesc" mode="list-char"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <xsl:apply-templates select="//tei:body"/>
             </div>
         </div>
     </xsl:template>
@@ -77,7 +84,7 @@
     </xsl:template>
     <xsl:template match="tei:pb">
         <a name="p{@n}"/>
-        <div class="row" style="background-color:#eee; border-top:1px solid #333; padding:.5em; margin:1em 0;">
+        <div class="row actFooter">
             <div class="col-md-1">
                 <span class="badge">
                     <xsl:value-of select="@n"/>
@@ -96,10 +103,8 @@
     </xsl:template>
     <xsl:template match="tei:div1">
         <a name="line-{@n}.0.0"/>
-        <div class="row">
-            <div class="col-md-12">
-                <xsl:apply-templates/>
-            </div>
+        <div class="div1">
+            <xsl:apply-templates/>
         </div>
         <hr/>
     </xsl:template>
@@ -110,10 +115,8 @@
     </xsl:template>
     <xsl:template match="tei:div2">
         <a name="line-{../@n}.{@n}.0"/>
-        <div class="row" style="margin-bottom:1em;">
-            <div class="col-md-12">
-                <xsl:apply-templates/>
-            </div>
+        <div class="div2">
+            <xsl:apply-templates/>
         </div>
     </xsl:template>
     <xsl:template match="tei:div2/tei:head">

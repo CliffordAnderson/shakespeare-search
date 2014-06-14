@@ -16,6 +16,7 @@ import module namespace alchemy="http://xqueryinstitute.org/alchemy" at "alchemy
 import module namespace search="http://xqueryinstitute.org/search" at "search.xqm";
 import module namespace play="http://xqueryinstitute.org/play" at "view-play.xqm";
 import module namespace facets="http://xqueryinstitute.org/facets" at "facets.xqm";
+import module namespace stats="http://xqueryinstitute.org/stats" at "play-stats.xqm";
 import module namespace demo="http://xqueryinstitute.org/demo" at "demo.xqm";
 
 declare option exist:serialize "method=html5 media-type=text/html enforce-xhtml=yes";

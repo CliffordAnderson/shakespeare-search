@@ -16,17 +16,27 @@ declare namespace httpclient="http://exist-db.org/xquery/httpclient";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
+declare function alchemy:build-headers() as node(){
+   <headers>
+     <header name="Content-Type" value="application/x-www-form-urlencoded"/>
+   </headers>
+};
+(:~
+ : Querying the Alchemy API using POST
+ FIX multi part post, try using http:send-request
+:)
 declare function alchemy:build-tone-node($fulltext as xs:string?) as node()*{
-    let $text := encode-for-uri(substring($fulltext,1,4500))
-    let $alchemy-tone := concat('http://access.alchemyapi.com/calls/text/TextGetTextSentiment?apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b&amp;text=',$text)
-    let $http-tone := httpclient:get(xs:anyURI($alchemy-tone), true(), <Headers/>)
+    let $text := concat('apikey:790fed0a9807d70e537757bdfbd2904cc17d6c1b,text:',encode-for-uri(substring($fulltext,1,4500)))
+    let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetTextSentiment'
+    let $http-tone := httpclient:post(xs:anyURI($alchemy-uri), $text, true(), alchemy:build-headers())
     return 
         <div><strong>Sentiment: </strong> {$http-tone//*:docSentiment}</div>
 };
+
 declare function alchemy:build-concept-node($fulltext as xs:string?) as node()*{
-    let $text := encode-for-uri(substring($fulltext,1,4500))
-    let $alchemy-concept := concat('http://access.alchemyapi.com/calls/text/TextGetRankedConcepts?apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b&amp;text=',$text)
-    let $http-concept := httpclient:get(xs:anyURI($alchemy-concept), true(), <Headers/>)
+    let $text := concat('text=',encode-for-uri(substring($fulltext,1,4500)))
+    let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts?apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b'
+    let $http-concept := httpclient:post(xs:anyURI($alchemy-uri), $text, true(), alchemy:build-headers())
     return 
          <div><strong>Concepts: </strong>
             <dl class="offset1" style="margin-left: 1em;">
