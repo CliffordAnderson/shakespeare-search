@@ -41,7 +41,7 @@ declare function demo:hello($node as node(), $model as map(*), $lang as xs:strin
 };
 
 declare %templates:default('lang', 'it')
-function demo:hello-wrapper($node as node(), $model as map (*), $lang as xs:string) as element(div) {
+function demo:hello-wrapper($node as node(), $model as map(*), $lang as xs:string) as element(div) {
     demo:hello($node, $model, $lang)
 };
 

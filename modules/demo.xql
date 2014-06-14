@@ -29,5 +29,10 @@ declare option exist:serialize "method=html5 media-type=text/html";
         <p>{
             rest:resource-functions()
         }</p>
+        <p>{count(
+            for $speechBySpeaker in //tei:sp
+            return $speechBySpeaker
+        )
+        }</p>
     </body>
 </html>
