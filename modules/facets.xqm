@@ -22,11 +22,11 @@ let $callback := util:function(xs:QName("facets:term-callback"), 2)
 (: declare facets as XPath expressions, relative to the search hits :) 
 let $facets := 
   <facets>
-    <facet label="play">$hits/ancestor::*//tei:titleStmt/tei:title</facet>
+    <facet label="play">$hits/ancestor::tei:TEI//tei:titleStmt/tei:title</facet>
     <facet label="speaker">$hits//tei:speaker</facet>
     <facet label="genre">$hits/ancestor::tei:TEI//xqi:genre</facet>
-    <facet label="performed">$hits/ancestor::*//xqi:performed</facet>
-    <facet label="date">$hits/ancestor::*//tei:witness/tei:date</facet>
+    <facet label="performed">$hits/ancestor::tei:TEI//xqi:performed</facet>
+    <facet label="date">$hits/ancestor::tei:TEI//tei:witness/tei:date</facet>
   </facets> 
 return 
     (: loop over facet XPaths, and evaluate them :) 

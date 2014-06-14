@@ -162,6 +162,7 @@ return
 
 (:~
  : Output search results using KWIC
+ : NOTE would be nice to add a link to scene, or to hit within the play
 :)
 declare function search:simple() as node()*{
     let $path := concat("collection('/db/apps/xq-institute/data/indexed-plays')",search:build-search-path(),search:add-facets())
@@ -177,11 +178,11 @@ declare function search:simple() as node()*{
              <div class="panel" >
                  <div>
                     {search:paging($hits, $total-hits)}
-                    {search:decode-facets()}
                 </div>
                 {
                  for $hit at $p in subsequence($hits, $search:start, $search:records)
-                 let $uri := base-uri($hit)
+                 let $get-uri := base-uri($hit)
+                 let $uri := replace($get-uri,'/indexed-plays','/plays')
                  let $title := $hit/ancestor::tei:TEI//tei:titleStmt/tei:title/text()
                  let $matches-to-highlight := 2
                  let $trimmed-hit := search:trim-matches(util:expand($hit),$matches-to-highlight)
@@ -222,7 +223,12 @@ let $field-name :=
 return 
  <div class="row">
     <div class="col-md-6">
-       <h4>{$total-hits} results for: <span class="label label-info">{$search:term}</span> {if($search:field) then concat(' in ',$field-name) else ''}</h4> 
+       <div class="title">{$total-hits} results for: <span class="label label-info">{$search:term}</span> 
+       {if($search:field) then concat(' in ',$field-name) else ''}
+        <span class="title">
+            {search:decode-facets()}
+        </span>
+       </div> 
     </div>
     <div class="col-md-6">
         <ul class="pagination">
