@@ -72,6 +72,7 @@
     </target>
 
     <!-- Updates (destructively) the eXist-db with files from the file system -->
+    <!-- This has grown out of control... would be better to reimplement with a single executed XQuery -->
     <target name="update-db">
         <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}"
@@ -146,6 +147,17 @@
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
             <fileset dir="resources/css">
                 <include name="*.css"/>
+            </fileset>
+        </xdb:store>
+        <xdb:store createcollection="true" createsubcollections="true"
+          uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/resources/fonts"
+          user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
+            <fileset dir="resources/fonts">
+                <include name="*.eot"/>
+                <include name="*.svg"/>
+                <include name="*.ttf"/>
+                <include name="*.woff"/>
+                <include name="*.xml"/>
             </fileset>
         </xdb:store>
         <xdb:store createcollection="true" createsubcollections="true"
