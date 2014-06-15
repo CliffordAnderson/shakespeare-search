@@ -176,6 +176,7 @@
                 </section>
                 <section>
                     <h2>The Basics</h2>
+                    <br/>
                     <ul>
                         <li>
                             <span class="green">%rest</span>:<span class="purple">GET</span>
@@ -320,8 +321,8 @@
    %private
  function demo:list-plays() as element(plays) {
    &lt;plays&gt;{
-     for $play
-       in collection('/db/apps/xq-institute/data/plays')
+     for $play in collection(
+       '/db/apps/xq-institute/data/plays')
      return 
        &lt;play&gt;
          &lt;id&gt;{
@@ -344,49 +345,313 @@
    %private
  function demo:atomify($plays as element(plays))
      as element(feed) {
-   &lt;atom:feed xmlns:atom="http://www.w3.org/2005/Atom"&gt;
-     &lt;atom:id&gt;{
-       $server}/restxq/shakespeare/plays/atom&lt;/atom:id&gt;
-     &lt;atom:title&gt;Example Atom Feed&lt;/atom:title&gt;
-     &lt;atom:link rel="self"
-       href="{$server}/restxq/shakespeare/plays/atom"/&gt;
-     &lt;atom:updated&gt;{current-dateTime()}&lt;/atom:updated&gt;
-     {
-     (:
-       Update dates aren't in the right format,
-       but we'll pretend they are..
-     :)
-     for $play in $plays/play
-     let $id := $play/id/text()
-     return
-       &lt;atom:entry&gt;
-       &lt;atom:title&gt;{$play/title/text()}&lt;/atom:title&gt;
-       &lt;atom:author&gt;
-         &lt;atom:name&gt;{$play/author/text()}&lt;/atom:name&gt;
-       &lt;/atom:author&gt;
-       &lt;atom:link href="{
-         $server}/restxq/shakespeare/play/{$id}"/&gt;
-       &lt;atom:id&gt;{$server}/restxq/shakespeare/play/{
-         $id}&lt;/atom:id&gt;
+   let $server :=
+     'http://localhost:8080/exist/restxq/shakespeare'
+   return
+     &lt;atom:feed
+         xmlns:atom="http://www.w3.org/2005/Atom"&gt;
+       &lt;atom:id&gt;{$server}/plays/atom&lt;/atom:id&gt;
+       &lt;atom:title&gt;Example Atom Feed&lt;/atom:title&gt;
+       &lt;atom:link rel="self"
+         href="{$server}/plays/atom"/&gt;
        &lt;atom:updated&gt;{
-         $play/updateDate/text()
+         current-dateTime()
        }&lt;/atom:updated&gt;
-       &lt;/atom:entry&gt;
-     }
-   &lt;/atom:feed&gt;
+       {
+       (:
+         Update dates aren't in the right format,
+         but we'll pretend they are..
+       :)
+       for $play in $plays/play
+       let $id := $play/id/text()
+       return
+         &lt;atom:entry&gt;
+         &lt;atom:title&gt;{
+           $play/title/text()
+         }&lt;/atom:title&gt;
+         &lt;atom:author&gt;
+           &lt;atom:name&gt;{
+             $play/author/text()
+           }&lt;/atom:name&gt;
+         &lt;/atom:author&gt;
+         &lt;atom:link href="{$server}/play/{$id}"/&gt;
+         &lt;atom:id&gt;{$server}/play/{$id}&lt;/atom:id&gt;
+         &lt;atom:updated&gt;{
+           $play/updateDate/text()
+         }&lt;/atom:updated&gt;
+         &lt;/atom:entry&gt;
+       }
+     &lt;/atom:feed&gt;
 };
 
 </code>
                     </pre>
                 </section>
                 <section>
+                    <h2>With Variables</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:GET
+   %rest:path("/shakespeare/play/{$id}")
+   %output:media-type("text/html")
+   %output:method("html5")
+ function demo:get-play($id as xs:string) {
+   let $root :=
+     doc('../data/plays/' || $id || '.xml')
+   return
+     &lt;html&gt;
+       &lt;head&gt;
+         &lt;title&gt;{
+           $root//tei:titleStmt/tei:title/text()
+         }&lt;/title&gt;
+       &lt;/head&gt;
+       &lt;body&gt;{
+         transform:transform($root,
+         doc('../resources/xsl/teiHTML.xsl'), ())
+       }&lt;/body&gt;
+     &lt;/html&gt;
+ };
+
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/play/MND">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>With Parameters</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:GET
+   %rest:path("/shakespeare/play")
+   %rest:query-param("id", "{$id}")
+   %output:media-type("text/html")
+   %output:method("html5")
+ function demo:get-play-by($id as xs:string*) {
+   let $root :=
+     doc('../data/plays/' || $id || '.xml')
+   return
+     &lt;html&gt;
+       &lt;head&gt;
+         &lt;title&gt;{
+           $root//tei:titleStmt/tei:title/text()
+         }&lt;/title&gt;
+       &lt;/head&gt;
+       &lt;body&gt;{
+         transform:transform($root,
+         doc('../resources/xsl/teiHTML.xsl'), ())
+       }&lt;/body&gt;
+     &lt;/html&gt;
+ };
+
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/play?id=MND">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>Default Parameters</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:GET
+   %rest:path("/shakespeare/play")
+   %rest:query-param("id", "{$id}", "H8")
+   %output:media-type("text/html")
+   %output:method("html5")
+ function demo:get-play-by($id as xs:string+) {
+   let $root :=
+     doc('../data/plays/' || $id || '.xml')
+   return
+     &lt;html&gt;
+       &lt;head&gt;
+         &lt;title&gt;{
+           $root//tei:titleStmt/tei:title/text()
+         }&lt;/title&gt;
+       &lt;/head&gt;
+       &lt;body&gt;{
+         transform:transform($root,
+         doc('../resources/xsl/teiHTML.xsl'), ())
+       }&lt;/body&gt;
+     &lt;/html&gt;
+ };
+
+</code>
+                    </pre>
+                    <p>( <a target="_blank" href="http://localhost:8080/exist/restxq/shakespeare/play">Try it</a> )</p>
+                </section>
+                <section>
+                    <h2>And...</h2>
+                    <br/>
+                    <ul>
+                        <li style="padding-bottom: 20px;">%rest:form-param("parameter", "{$value}")<br/>
+                            <span style="font-size: 80%;">&#160;&#160;[application/x-www-form-urlencoded]</span>
+                        </li>
+                        <li style="padding-bottom: 20px;">%rest:header-param("User-Agent", "{$user-agent}")</li>
+                        <li style="padding-bottom: 20px;">%rest:cookie-param("username", "{$user}")</li>
+                    </ul>
+                    <br/>
+                    <br/>
+                    <p>(+ default values as a third argument)</p>
+                </section>
+                <section>
+                    <h2>RESTXQ DELETE</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:DELETE
+   %rest:path("/shakespeare/plays/delete/{$id}")
+   %output:media-type("text/txt")
+   %output:method("text")
+ function demo:delete-play($id as xs:string) {
+   if (exists(
+     doc('/db/apps/xq-institute/data/plays/'
+     || $id || '.xml')
+   ))
+   then (
+     xmldb:remove('/db/apps/xq-institute/data/plays',
+       $id || '.xml'),
+     if (exists(
+       doc('/db/apps/xq-institute/data/plays/'
+       || $id || '.xml')
+     ))
+     then demo:respond(500,
+       'Item was not successfully deleted')
+     else demo:respond(200,
+       'Item was successfully deleted')
+   )
+   else demo:respond(404,
+     'Item to be deleted did not exist!')
+ };
+
+ declare
+   %private
+ function demo:respond($code as xs:int,
+     $message as xs:string) {
+   (
+   &lt;rest:response&gt;
+     &lt;http:response status="{$code}"/&gt;
+   &lt;/rest:response&gt;, 
+   $message
+   )
+ };
+
+</code>
+                    </pre>
+                    <p style="font-size: 75%;">(Postman client demo)</p>
+                </section>
+                <section>
+                    <h2>RESTXQ PUT</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:PUT("{$data}")
+   %rest:path("/shakespeare/plays/add/{$id}")
+   %output:media-type("text/txt")
+   %output:method("text")
+ function demo:put-play($id as xs:string,
+     $data as node()) {
+   if (not(exists(
+     doc('/db/apps/xq-institute/data/plays/'
+     || $id || '.xml'))
+   ))
+   then (
+     let $item :=
+       xmldb:store('/db/apps/xq-institute/data/plays',
+       $id || '.xml', $data)
+     return (),
+     if (exists(
+       doc('/db/apps/xq-institute/data/plays/'
+       || $id || '.xml')
+     ))
+     then demo:respond(201,
+       'Item successfully created on the server')
+     else demo:respond(500,
+       'Item failed to be created on the server')
+   )
+   else demo:respond(409,
+     "Item already exists! Use POST to update it.")
+ };
+
+ declare
+   %private
+ function demo:respond($code as xs:int,
+     $message as xs:string) {
+   (
+     &lt;rest:response&gt;
+       &lt;http:response status="{$code}"/&gt;
+     &lt;/rest:response&gt;, 
+     $message
+   )
+ };
+
+</code>
+                    </pre>
+                    <p style="font-size: 75%;">(Postman client demo)</p>
+                </section>
+                <section>
+                    <h2>RESTXQ POST</h2>
+                    <pre class="stretch">
+                        <code class="javascript">
+ declare
+   %rest:POST('{$data}')
+   %rest:path('/shakespeare/plays/update/{$id}')
+   %output:media-type('text/txt')
+   %output:method('text')
+ function demo:post-play($id as xs:string,
+     $data as item()) {
+   if (exists(
+     doc('/db/apps/xq-institute/data/plays/'
+     || $id || '.xml')
+   ))
+   then
+     update insert
+       &lt;tei:change
+         who='http://xqueryinstitute.org/{$data}'
+         when='{current-dateTime()}'
+       &gt;Change made via POST.&lt;/tei:change&gt;
+     into
+       doc('/db/apps/xq-institute/data/plays/'
+       || $id || '.xml')//tei:revisionDesc
+   else demo:respond(404,
+     'Unable to find item to update.')
+ };
+
+ declare
+   %private
+ function demo:respond($code as xs:int,
+     $message as xs:string) {
+   (
+     &lt;rest:response&gt;
+       &lt;http:response status="{$code}"/&gt;
+     &lt;/rest:response&gt;, 
+     $message
+   )
+ };
+
+</code>
+                    </pre>
+                    <p style="font-size: 75%;">(Postman client demo)</p>
+                </section>
+                <section>
+                    <h2>Content Negotiation</h2>
+                    <br/>
+                    <ul>
+                        <li style="padding-bottom: 20px;">%rest:consumes("application/xml", "text/xml")</li>
+                        <li style="padding-bottom: 20px;">%rest:produces("application/atom+xml")</li>
+                    </ul>
+                </section>
+                <section>
                     <h2>Useful Links</h2>
+                    <br/>
                     <ul>
                         <li>
-                            <a href="http://restcookbook.com/">The REST Cookbook</a>
+                            <a href="http://exist-db.org/exist/apps/doc/devguide_rest.xml">eXist-db Dev Guide: REST</a>
                         </li>
                         <li>
-                            <a href="https://github.com/exquery/exquery/blob/master/exquery-restxq-specification/restxq-1.0-specification.html">RESTXQ 1.0 Specification</a>
+                            <a href="http://docs.basex.org/wiki/RESTXQ">BaseX RESTXQ Documentation</a>
+                        </li>
+                        <li>
+                            <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html">HTTP Status Codes</a>
                         </li>
                     </ul>
                 </section>

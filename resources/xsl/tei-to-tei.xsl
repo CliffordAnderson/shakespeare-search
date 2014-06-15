@@ -1,4 +1,4 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xqi="http://xqueryinstitute.org/ns" xmlns:tei="http://www.tei-c.org/ns/1.0" version="2.0" exclude-result-prefixes="#all">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:xqi="http://xqueryinstitute.org/ns" version="2.0" exclude-result-prefixes="#all">
     <xsl:template match="/">
         <TEI xmlns="http://www.tei-c.org/ns/1.0">
             <xsl:apply-templates select="/tei:TEI/child::*"/>

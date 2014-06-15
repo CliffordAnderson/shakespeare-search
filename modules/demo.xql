@@ -2,6 +2,7 @@ xquery version "3.0";
 
 declare namespace tei = "http://www.tei-c.org/ns/1.0";
 declare namespace rest = "http://exquery.org/ns/restxq";
+declare namespace ft = "http://exist-db.org/xquery/lucene";
 
 declare option exist:serialize "method=html5 media-type=text/html";
 
@@ -27,12 +28,7 @@ declare option exist:serialize "method=html5 media-type=text/html";
             </table>
         </p>
         <p>{
-            rest:resource-functions()
-        }</p>
-        <p>{count(
-            for $speechBySpeaker in //tei:sp
-            return $speechBySpeaker
-        )
+            (: rest:resource-functions() :)()
         }</p>
     </body>
 </html>
