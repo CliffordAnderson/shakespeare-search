@@ -213,7 +213,10 @@
             import module namespace sm = "http://exist-db.org/xquery/securitymanager";
             import module namespace dbutil = "http://exist-db.org/xquery/dbutil";
             dbutil:scan(xs:anyURI("/db/apps/${project.app}"), function($collection, $resource) {
-                if ($resource) then sm:chgrp($resource, 'guest')
+                if ($resource and ends-with($resource, '.xql'))
+                    then (sm:chgrp($resource, 'guest'), sm:chmod($resource, 'rwxr-xr-x'))
+                else if ($resource)
+                    then sm:chgrp($resource, 'guest')
                 else sm:chgrp($collection, 'guest')
             })
         </xdb:xquery>
