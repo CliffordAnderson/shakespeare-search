@@ -69,6 +69,10 @@
             <fileset dir="." includes="**/*"/>
             <globmapper from="*.xconf.xml" to="*.xconf"/>
         </move>
+        <move todir="." verbose="false">
+            <fileset dir="." includes="**/*"/>
+            <globmapper from="*.svg.xml" to="*.svg"/>
+        </move>
     </target>
 
     <!-- Updates (destructively) the eXist-db with files from the file system -->

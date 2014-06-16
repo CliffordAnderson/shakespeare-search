@@ -1,0 +1,65 @@
+{
+	"id": "32eb9dfc-ceae-bdfa-8b5a-f81223ac7d57",
+	"name": "RESTXQ",
+	"description": "",
+	"order": [
+		"a8e9c23b-2473-eabb-d804-36f649713a24",
+		"bf420302-e716-aa2c-ef1a-fe4cb1763e9d",
+		"b3befd4c-3fe9-1ce9-a51b-144a641335db"
+	],
+	"folders": [],
+	"timestamp": 1402781490176,
+	"synced": false,
+	"requests": [
+		{
+			"id": "a8e9c23b-2473-eabb-d804-36f649713a24",
+			"headers": "Authorization: Basic YWRtaW46Ymx1ZW10bnM=\n",
+			"url": "http://localhost:8080/exist/restxq/shakespeare/plays/delete/H8",
+			"pathVariables": {},
+			"method": "DELETE",
+			"data": "",
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"time": 1402782305967,
+			"name": "DELETE",
+			"description": "",
+			"collectionId": "32eb9dfc-ceae-bdfa-8b5a-f81223ac7d57",
+			"responses": [],
+			"synced": false
+		},
+		{
+			"id": "b3befd4c-3fe9-1ce9-a51b-144a641335db",
+			"headers": "Content-Type: application/xml\nAuthorization: Basic YWRtaW46Ymx1ZW10bnM=\n",
+			"url": "http://localhost:8080/exist/restxq/shakespeare/plays/update/Ado",
+			"pathVariables": {},
+			"method": "POST",
+			"data": "ksclarke",
+			"dataMode": "raw",
+			"version": 2,
+			"tests": "",
+			"time": 1402870891913,
+			"name": "POST",
+			"description": "",
+			"collectionId": "32eb9dfc-ceae-bdfa-8b5a-f81223ac7d57",
+			"responses": [],
+			"synced": false
+		},
+		{
+			"id": "bf420302-e716-aa2c-ef1a-fe4cb1763e9d",
+			"headers": "Content-Type: application/xml\nAuthorization: Basic YWRtaW46Ymx1ZW10bnM=\n",
+			"url": "http://localhost:8080/exist/restxq/shakespeare/plays/add/H8",
+			"pathVariables": {},
+			"method": "PUT",
+			"dataMode": "binary",
+			"version": 2,
+			"tests": "",
+			"time": 1402866485775,
+			"name": "PUT",
+			"description": "",
+			"collectionId": "32eb9dfc-ceae-bdfa-8b5a-f81223ac7d57",
+			"responses": [],
+			"synced": false
+		}
+	]
+}
