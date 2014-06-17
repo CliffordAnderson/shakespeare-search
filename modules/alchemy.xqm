@@ -12,6 +12,7 @@ import module namespace templates="http://exist-db.org/xquery/templates" ;
 import module namespace config="http://localhost:8080/exist/apps/xq-institute/config" at "config.xqm";
 
 declare namespace util="http://exist-db.org/xquery/util";
+declare namespace http="http://expath.org/ns/http-client";
 declare namespace httpclient="http://exist-db.org/xquery/httpclient";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
@@ -26,16 +27,28 @@ declare function alchemy:build-headers() as node(){
  FIX multi part post, try using http:send-request
 :)
 declare function alchemy:build-tone-node($fulltext as xs:string?) as node()*{
-    let $text := concat('apikey:790fed0a9807d70e537757bdfbd2904cc17d6c1b,text:',encode-for-uri(substring($fulltext,1,4500)))
+    let $text := concat('apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b&amp;text=',encode-for-uri(substring($fulltext,1,4500)))
     let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetTextSentiment'
     let $http-tone := httpclient:post(xs:anyURI($alchemy-uri), $text, true(), alchemy:build-headers())
     return 
         <div><strong>Sentiment: </strong> {$http-tone//*:docSentiment}</div>
 };
 
+ declare function local:expath-http($fulltext as xs:string?) as node()*{
+    let $text := concat('apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b&amp;text=',encode-for-uri(substring($fulltext,1,4500)))
+    let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetTextSentiment'
+    let $http-tone := httpclient:post(xs:anyURI($alchemy-uri), $text, true(), alchemy:build-headers())
+    let $build-request :=
+         <http:request href="{$alchemy-uri}" method="post">
+            <http:body media-type="application/x-www-form-urlencoded">{$text}</http:body>
+        </http:request>
+    let $request := http:send-request($build-request, $alchemy-uri)
+    return 
+    <div><strong>Sentiment2: </strong> {$http-tone//*:docSentiment}</div>
+ };
 declare function alchemy:build-concept-node($fulltext as xs:string?) as node()*{
-    let $text := concat('text=',encode-for-uri(substring($fulltext,1,4500)))
-    let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts?apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b'
+    let $text := concat('apikey=790fed0a9807d70e537757bdfbd2904cc17d6c1b&amp;text=',encode-for-uri(substring($fulltext,1,4500)))
+    let $alchemy-uri := 'http://access.alchemyapi.com/calls/text/TextGetRankedConcepts'
     let $http-concept := httpclient:post(xs:anyURI($alchemy-uri), $text, true(), alchemy:build-headers())
     return 
          <div><strong>Concepts: </strong>
@@ -86,7 +99,7 @@ declare function alchemy:get-tone($rec as node()){
                 </div>
                 <div id="{concat('act',$act/@n)}" class="panel-collapse collapse in">
                     <div class="panel-body">
-                        {(alchemy:build-tone-node($fulltext), alchemy:build-concept-node($fulltext))}
+                        {(local:expath-http($fulltext),alchemy:build-tone-node($fulltext), alchemy:build-concept-node($fulltext))}
                      </div>           
                 </div>
             </div>

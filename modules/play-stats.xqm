@@ -25,7 +25,6 @@ let $words := count($rec/tei:sp//tei:w)
 return 
    <div>
     <div>Speakers: {$speakers}</div>
-    <div>Words: {$words}</div>
    </div>
 };
 
@@ -44,7 +43,7 @@ declare %templates:wrap function stats:get-play-stats($node as node(), $model as
                 <a href="play.html?uri={$uri}">Full text</a>
             </p>
             <div>
-              {stats:view-play-stats($rec)}
+              {(:stats:view-play-stats($rec):) ''}
               {alchemy:get-tone($rec)}
             </div>            
         </div>
