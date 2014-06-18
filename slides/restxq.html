@@ -25,6 +25,11 @@
             <div class="slides">
                 <section>
                     <h1>REST<span style="font-size: smaller;">ful</span> XQuery</h1>
+                    <aside class="notes">
+                        <p>Not about the language or a systems-view as much as an application view</p>
+                        <p>"How do I make this need technology work with other neat technologies?"</p>
+                        <p>REST libraries in other languages + other toolkits (angularjs, etc.)</p>
+                    </aside>
                 </section>
                 <section>
                     <h1>REST</h1>
@@ -34,49 +39,29 @@
                         <p>An architectural style first expressed by Roy Fielding in his PhD dissertation.</p>
                         <p>Used by many to describe the desired architecture for the World Wide Web.</p>
                         <p>Fielding used REST to design HTTP 1.1 and Uniform Resource Identifiers (URIs).</p>
-                        <p>An alternative, simpler Web services architecture (in contrast to SOAP).</p>
+                        <p>Representations of resources whose state is updated, delivered, etc. via HTTP actions at URIs</p>
                     </aside>
                 </section>
                 <section>
-                    <h2>Architecture</h2>
+                    <h2>The Context</h2>
                     <br/>
                     <ul style="list-style-type:none; margin: 10px;">
-                        <li style="padding: 10px;">Components</li>
-                        <li style="padding: 10px;">Connectors</li>
-                        <li style="padding: 10px;">Data</li>
+                        <li style="padding: 10px;">XML-RPC</li>
+                        <li style="padding: 10px;">SOAP</li>
+                        <li style="padding: 10px;">Corba</li>
                     </ul>
-                    <aside class="notes">
-                        <p>A component is an abstract unit of software instructions and internal state that provides a transformation of data via its interface.</p>
-                        <p>A connector is an abstract mechanism that mediates communication, coordination, or cooperation among components</p>
-                        <p>Data is an element of information that is transferred from a component, or received by a component, via a connector</p>
-                    </aside>
                 </section>
                 <section>
-                    <h2>Properties</h2>
+                    <h2>REST's Advantages</h2>
                     <br/>
                     <ul>
-                        <li style="padding: 10px;">Performant</li>
-                        <li style="padding: 10px;">Scalable</li>
                         <li style="padding: 10px;">Simple Interfaces</li>
-                        <li style="padding: 10px;">Modifiable</li>
                         <li style="padding: 10px;">Visible Communications</li>
-                        <li style="padding: 10px;">Portable</li>
-                        <li style="padding: 10px;">Reliable</li>
-                    </ul>
-                    <aside class="notes">Should I really go over all these or just the highlights?</aside>
-                </section>
-                <section>
-                    <h2>Architectural Constraints</h2>
-                    <br/>
-                    <ul>
-                        <li style="padding: 10px;">Client-Server</li>
                         <li style="padding: 10px;">Stateless</li>
                         <li style="padding: 10px;">Cacheable</li>
                         <li style="padding: 10px;">Layered</li>
                         <li style="padding: 10px;">Code on Demand (optional)</li>
-                        <li style="padding: 10px;">Uniform Interface</li>
                     </ul>
-                    <aside class="notes">Should I really go over all these or just the highlights?</aside>
                 </section>
                 <section>
                     <h2>REST in eXist-db Web Services</h2>
