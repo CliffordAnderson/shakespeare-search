@@ -1,0 +1,8 @@
+<collection xmlns="http://exist-db.org/collection-config/1.0">
+    <index xmlns:xqi="http://xqueryinstitute.org/ns" xmlns:tei="http://www.tei-c.org/ns/1.0">
+        <fulltext default="none" attributes="no"/>
+    </index>
+    <triggers>
+        <trigger class="org.exist.extensions.exquery.restxq.impl.RestXqTrigger"/>
+    </triggers>
+</collection>
