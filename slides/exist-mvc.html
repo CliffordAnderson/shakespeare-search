@@ -189,36 +189,7 @@
                         </pre>
                     </section>
                     <section>
-                        <h2>Better Integration... Automagically!</h2>
-                        <br/>
-                        <ul>
-                            <li>automatic parameter injection</li>
-                            <li>automatic type conversion</li>
-                        </ul>
-                    </section>
-                    <section>
-                        <h2>Boilerplate Code<br/>Not Required</h2>
-                        <pre class="stretch">
-                            <code class="language-javascript">
- xquery version "3.0";
-
- declare namespace request =
-     "http://exist-db.org/xquery/request";
-
- let $query :=
-     request:get-parameter('query', ())
- let $field :=
-     request:get-parameter('field', ())
-
- let $size :=
-     request:get-parameter('size', 1)
-     cast as xs:int
-
-</code>
-                        </pre>
-                    </section>
-                    <section>
-                        <h2>Function Parameters</h2>
+                        <h2>Function Arguments</h2>
                         <pre class="stretch">
                             <code class="htmltemplate">
  &lt;div data-template="templates:surround"
@@ -270,7 +241,41 @@
                         </p>
                     </section>
                     <section>
-                        <h2>Multiple Values</h2>
+                        <h2>Argument Integration...</h2>
+                        <br/>
+                        <h2>Automagically!</h2>
+                        <br/>
+                        <br/>
+                        <ul>
+                            <li>automatic parameter injection</li>
+                            <li>automatic type conversion</li>
+                        </ul>
+                        <br/>
+                        <br/>
+                    </section>
+                    <section>
+                        <h2>Boilerplate Code<br/>Not Required</h2>
+                        <pre class="stretch">
+                            <code class="language-javascript">
+ xquery version "3.0";
+
+ declare namespace request =
+     "http://exist-db.org/xquery/request";
+
+ let $query :=
+     request:get-parameter('query', ())
+ let $field :=
+     request:get-parameter('field', ())
+
+ let $size :=
+     request:get-parameter('size', 1)
+     cast as xs:int
+
+</code>
+                        </pre>
+                    </section>
+                    <section>
+                        <h2>Automagically!</h2>
                         <br/>
                         <ul>
                             <li>HTTP Parameters</li>
@@ -441,7 +446,7 @@
                         </p>
                     </section>
                     <section>
-                        <h2>Show Me the Code!</h2>
+                        <h2>If-Parameter Functions</h2>
                         <pre class="stretch">
                             <code class="javascript">
  declare function demo:say-hello($node as node(),
@@ -597,15 +602,15 @@
                     </section>
                 </section>
                 <section>
-                    <h2>A TEI Project</h2>
+                    <h2>Useful Links</h2>
                     <br/>
                     <ul>
-                        <li>Base HTML Template</li>
-                        <li>HTML5 Div for a Document</li>
-                        <li>HTML5 Div for Search Results</li>
-                        <li>HTML5 Div for Browse Page</li>
-                        <li>Controller Configuration<br/>
-                            <br/>RESTful Endpoints?</li>
+                        <li>
+                            <a href="http://exist-db.org/exist/apps/doc/templating.xml">HTML Templates</a>
+                        </li>
+                        <li>
+                            <a href="http://exist-db.org/exist/apps/doc/urlrewrite.xml">eXist-db Controller</a>
+                        </li>
                     </ul>
                 </section>
             </div>
