@@ -1,6 +1,11 @@
 xquery version "3.0";
 (: module namespace :)
 module namespace search="http://xqueryinstitute.org/search";
+(:~
+ : Build fielded search 
+ : @author Winona Salesky
+ : @version 0.1
+:)
 
 (: Templating modules :)
 import module namespace templates="http://exist-db.org/xquery/templates" ;
@@ -26,7 +31,7 @@ declare variable $search:performed {request:get-parameter('performed','') cast a
 declare variable $search:date {request:get-parameter('date','') cast as xs:string};
 
 (:~
- : Construct search string for evaluation
+ : Constructs search string for evaluation
  : NOTE retool to add query node
 :)
 declare function search:build-search-path(){
@@ -42,18 +47,8 @@ if($search:field != '') then
 };
 
 (:~
- : String for facet evaluation
- : not needed?
+ : Add facets to search string to narrow results
 :)
-declare function search:build-facet-path(){
-    if($search:field != '') then 
-        if($search:field = 'title') then concat("ancestor::tei:TEI/tei:titleStmt/tei:title[ft:query(.,'",$search:term,"')]")
-        else if($search:field = 'sp') then concat("ancestor::tei:sp[ft:query(.,'",$search:term,"')]")
-        else if($search:field = 'stage') then concat("ancestor::tei:stage[ft:query(.,'",$search:term,"')]")
-        else ()
-    else concat("ancestor::tei:TEI//tei:body[ft:query(.,'",$search:term,"')]")   
-};
-
 declare function search:add-facets() as xs:string*{
 let $title-facet :=
     if($search:play) then
@@ -79,7 +74,10 @@ return
     concat($title-facet,$speaker-facet,$genre-facet,$performed-facet,$date-facet) 
 };
 
-declare function search:decode-facets(){
+(:
+ : Build facet text to display on search results page
+:)
+declare function search:decode-facets() as xs:string*{
 let $title-facet :=
     if($search:play) then
         concat("Title: ",$search:play," ")
@@ -107,6 +105,7 @@ return
 (:~
  : Helper function: create a lucene query from the user input
  : Tests for quotes in input to create phrase or near matches
+ : This is an example only, it is not used in the search
 :)
 declare %private function search:create-query() {
     <query>
@@ -166,7 +165,6 @@ return
 :)
 declare function search:simple() as node()*{
     let $path := concat("collection('/db/apps/xq-institute/data/indexed-plays')",search:build-search-path(),search:add-facets())
-    let $query-string := search:build-facet-path()
     let $hits := util:eval($path)
     let $total-hits := count($hits)
     return
@@ -250,6 +248,9 @@ return
  </div>
 };
 
+(:~
+ : Pass search results to search.html 
+:)
 declare %templates:wrap function search:display-results($node as node(), $model as map(*)){
  if($search:term !='') then  
     search:simple()

@@ -1,11 +1,10 @@
 xquery version "3.0";
 
 module namespace stats="http://xqueryinstitute.org/stats";
-
-(:
- : Retrieve play xml transform with xsl for html output
- : For local installations you can not use the html APIs, must use the text API
- : text API seems to have a character limitation. 
+(:~
+ : Build new page to display alchemyAPI results for each play 
+ : @author Winona Salesky
+ : @version 0.1
 :)
 
 import module namespace templates="http://exist-db.org/xquery/templates" ;
@@ -48,7 +47,5 @@ declare %templates:wrap function stats:get-play-stats($node as node(), $model as
               {alchemy:get-tone($rec)}
             </div>            
         </div>
-              
-       
 };
 

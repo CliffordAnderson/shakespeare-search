@@ -1,5 +1,9 @@
 xquery version "3.0";
-
+(:~
+ : Transforms original plays into a more easily searchable version 
+ : @author Winona Salesky
+ : @version 0.1
+:)
 declare namespace xmldb="http://exist-db.org/xquery/xmldb";
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
@@ -7,12 +11,13 @@ declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
 
 declare option exist:serialize "method=xml media-type=text/xml omit-xml-declaration=no indent=yes";
+
 (:~
- : Add fulltext fields for faster indexing. 
+ : Logs user in as admin, you must put in your password 
  : Uses locally defined namespace to differentiate between local and tei elements
  : If using in production would have to add a trigger to rerun when documents are updated.
- NOTE: add in dates
- re-index, change xqueries to use new index. 
+ : Run add-dates.xql on the newly created data
+ : re-index, change xqueries to use new index. 
 :)
 
 

@@ -1,5 +1,9 @@
 xquery version "3.0";
-
+(:~
+ : Main app module, used for browse functions 
+ : @author Winona Salesky
+ : @version 0.1
+:)
 module namespace app="http://localhost:8080/exist/apps/xq-institute/templates";
 
 import module namespace templates="http://exist-db.org/xquery/templates" ;
@@ -7,11 +11,15 @@ import module namespace config="http://localhost:8080/exist/apps/xq-institute/co
 declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
+(: global variable to pass in sort from url:)
 declare variable $app:sort {request:get-parameter('sort', '')};
+
 (:~
  : Browse using sort
  : Using user defined functions to modularize code
  : Alternative to collection would be to use : xmldb:get-child-resources($config:app-root || "/data/indexed-plays")
+ : @node used by eXist templates
+ : @model used by eXist templates
 :)
 declare %templates:wrap function app:browse-list-items($node as node(), $model as map(*)){
     for $play in collection($config:app-root || "/data/indexed-plays")
@@ -27,7 +35,8 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
         if($app:sort = 'death') then $death
         else if($app:sort = 'date') then $date
         else $title        
-        (: Dynamic sort and sort order, does not work, may be eXist bug. Can also use util:eval on whole FLWOR
+        (: Dynamic sort and sort order, does not work, may be eXist bug. Could use util:eval 
+            on whole FLWOR expression
             if ($app:sort = 'death') then $death else () descending,
             if ($app:sort = 'title') then $sort-title else () ascending,
             if ($app:sort = 'date') then $date else () ascending,
@@ -37,6 +46,15 @@ declare %templates:wrap function app:browse-list-items($node as node(), $model a
         app:display-title($title,$uri,$date,$death)
 }; 
 
+(:~
+ : Build title element with links to html, pdf, and xml views of the data.
+ : Using user defined functions to modularize code
+ : Alternative to collection would be to use : xmldb:get-child-resources($config:app-root || "/data/indexed-plays")
+ : @title play title
+ : @uri play uri
+ : @date play date
+ : @death number of deaths in play
+:)
 declare function app:display-title($title as xs:string?,$uri as xs:anyURI?,$date as xs:string?, $death as xs:integer?) as node()*{
         <li>
             <span class="title">{$title}.</span>

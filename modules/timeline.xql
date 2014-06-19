@@ -1,15 +1,19 @@
 xquery version "3.0";
 (:~
- :  jsonouput for timelinejs  
- :)
-
+ : Output json for interacting with timeline widget. 
+ : @author Winona Salesky
+ : @version 0.1
+:)
 declare namespace xslt="http://exist-db.org/xquery/transform";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace request="http://exist-db.org/xquery/request";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace json="http://www.json.org";
-
-declare option exist:serialize "method=json media-type=text/javascript encoding=UTF-8";
+(:Serialize as json:)
+(:declare option exist:serialize "method=json media-type=text/javascript encoding=UTF-8";:)
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare option output:method "json";
+declare option output:media-type "text/javascript";
 
 <json>
 <timeline>
