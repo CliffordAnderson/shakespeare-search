@@ -5,9 +5,15 @@ declare namespace util="http://exist-db.org/xquery/util";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace xslfo = "http://exist-db.org/xquery/xslfo";
-
+(:~
+ : Add dates from an external source to each tei record. 
+ : @author Winona Salesky
+ : @version 0.1
+:)
 
 (:~
+ : @depreciated a test xquery to create faster KWIC results
+ : Eventual solution was to add a second version of the data 
  : Add fulltext fields for faster indexing. 
  : Uses locally defined namespace to differentiate between local and tei elements
  : If using in production would have to add a trigger to rerun when documents are updated.
@@ -27,7 +33,7 @@ let $change-log :=
         Added local fields fulltext, speech, and stage for fulltext searching. For: XQueryInstitute
     </change>   
 return 
-    (:"Don't run this now":)
+    (: Uncomment to run the expressions below to run:)
     (:
     if($doc//xqi:fulltext) then 
         try {
@@ -61,26 +67,4 @@ return
               :)
               
  (:End updates:)             
-    
-(:~ 
- : Add constructed fields to index for more efficient searching 
-xquery version "3.0";
-declare namespace tei="http://www.tei-c.org/ns/1.0";
-declare namespace xqi="http://xqueryinstitute.org/ns";
-
-for $doc-index in collection('/db/apps/xq-institute/data')
-let $uri := base-uri($doc-index)
-let $doc := xmldb:document($uri) 
-
-return 
-ft:index($uri, <doc>
-    <field name="play" store="yes">
-       {
-            for $word in  $doc//tei:body/descendant::*/tei:w/text()
-            return concat($word,' ')
-        }
-    </field>
-</doc>)
-
-):)
 

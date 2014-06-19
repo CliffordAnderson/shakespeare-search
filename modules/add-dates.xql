@@ -6,8 +6,18 @@ declare namespace httpclient="http://exist-db.org/xquery/httpclient";
 
 (:~
  : Add dates from an external source to each tei record. 
+ : @author Winona Salesky
+ : @version 0.1
 :)
-declare function local:get-genre($plays){
+
+(:~
+ : Retrieve genres for each play in the collection from www.opensourceshakespeare.org/views/plays/plays.php
+ : Inserts new element xqi:genre into each playafter the tei:text element
+ : Demonstrates httpclient:get() function and XQuery Update insert functions
+ : @param plays
+ : @return empty
+:)
+declare function local:get-genre($plays as element()){
 let $url := 'http://www.opensourceshakespeare.org/views/plays/plays.php'
 let $http-get-data := httpclient:get(xs:anyURI($url), true(), <Headers/>)
 let $comedies := string-join($http-get-data//*:td[contains(descendant::*:h3,'COMEDIES')]/descendant::*:a/node())
@@ -33,13 +43,15 @@ return
 
 };
 
-declare function local:attribute-changes(){
-        <change xmlns="http://www.tei-c.org/ns/1.0" who="http://xqueryinstitute.org/wsalesky" when="{current-date()}">
-        Added additional tei:witness for original publication date to tei:source, Added xqi:performed for first performance date, and xqi:genre for play genre. Source: http://www.opensourceshakespeare.org/views/plays/plays.php  For: XQueryInstitute
-    </change>     
-};
-
-declare function local:get-dates($plays){
+(:~
+ : Retrieve publication date and first performed date
+ : for each play in the collection from www.shakespeare-online.com/keydates/playchron.html
+ : Inserts publication date into tei:listWit element
+ : Demonstrates httpclient:get() function and XQuery Update insert functions
+ : @param plays
+ : @return empty
+:)
+declare function local:get-dates($plays as element()){
 let $url := 'http://www.shakespeare-online.com/keydates/playchron.html'
 let $http-get-data := httpclient:get(xs:anyURI($url), true(), <Headers/>) 
 let $uri := base-uri($plays)
@@ -69,6 +81,19 @@ return
         else ''    
 };
 
+(:~
+ : Builds change element to document changes made to the plays
+:)
+declare function local:attribute-changes() as element(){
+    <change xmlns="http://www.tei-c.org/ns/1.0" who="http://xqueryinstitute.org/wsalesky" when="{current-date()}">
+        Added additional tei:witness for original publication date to tei:source, Added xqi:performed for first performance date, and xqi:genre for play genre. Source: http://www.opensourceshakespeare.org/views/plays/plays.php  For: XQueryInstitute
+    </change>     
+};
+
+(:~
+ : Adds new elements xqi:genre, xqi:performed and tei:witness/date to play data
+ : @return empty
+:)
 for $plays in collection('/db/apps/xq-institute/data/indexed-plays')//tei:titleStmt/tei:title
 return (local:get-dates($plays),local:get-genre($plays))
     

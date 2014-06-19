@@ -1,6 +1,12 @@
 xquery version "3.0";
 (: module namespace :)
 module namespace facets="http://xqueryinstitute.org/facets";
+(:~
+ : Add facets using eXist's index:key()
+ : Alternative could be to use group by  
+ : @author Winona Salesky
+ : @version 0.1
+:)
 
 (: Namespaces used by query :)
 declare namespace util="http://exist-db.org/xquery/util";
@@ -8,7 +14,9 @@ declare namespace tei="http://www.tei-c.org/ns/1.0";
 declare namespace xqi="http://xqueryinstitute.org/ns";
 
 (:~
- : Callback function used by index-keys() function, formats index-keys results
+ : Callback function used by index-keys(), formats index-keys results
+ : @term index term
+ : @data 
 :)
 declare function facets:term-callback($term as xs:string, $data as xs:int+) as element() {
     <span freq="{$data[1]}" docs="{$data[2]}" n="{$data[3]}">{$term}</span> 
@@ -16,6 +24,7 @@ declare function facets:term-callback($term as xs:string, $data as xs:int+) as e
 
 (:~
  : Build facets based on search results
+ : @hits search results passed in from search.xqm
 :)
 declare function facets:facets($hits as node()*) as node()*{
 let $callback := util:function(xs:QName("facets:term-callback"), 2)

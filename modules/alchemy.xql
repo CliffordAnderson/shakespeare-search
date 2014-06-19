@@ -6,6 +6,7 @@ declare namespace xqi="http://xqueryinstitute.org/ns";
 declare namespace tei="http://www.tei-c.org/ns/1.0";
 
 (:
+ : @depreciated use alchemy.xqm
  : Use httpclient to send data to AlchemyAPI for text anlysis.
  : For local installations you can not use the html APIs, must use the text API
  : text API seems to have a character limitation. 
