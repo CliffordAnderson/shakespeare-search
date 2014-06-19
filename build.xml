@@ -92,17 +92,13 @@
         <xdb:store createcollection="true" createsubcollections="true"
             uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}"
             user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
-            <fileset dir="system/config/db/apps/${project.app}">
+            <fileset dir=".">
                 <include name="collection.xconf"/>
             </fileset>
         </xdb:store>
         <xdb:store createcollection="true" createsubcollections="true"
-            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}/data/indexed-plays/"
-            user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
-            <fileset dir="system/config/db/apps/${project.app}/data/indexed-plays">
-                <include name="collection.xconf"/>
-            </fileset>
-        </xdb:store>
+            uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/system/config/db/apps/${project.app}/data/indexed-plays"
+            user="${db.username}" password="${db.password}" srcfile="indexed-plays.xconf"/> <!-- u/p should be configured in build.properties -->
         <xdb:store createcollection="true" createsubcollections="true"
           uri="xmldb:exist://localhost:8080/exist/xmlrpc/db/apps/${project.app}/data/plays"
           user="${db.username}" password="${db.password}"> <!-- u/p should be configured in build.properties -->
